@@ -1,0 +1,25 @@
+{
+  "userdetails": [
+    {
+      "id": 1,
+      "username": "vimalselvam3@gmail.com",
+      "password": "Vimalcolan@123"
+    },
+      {
+        "id": 2,
+        "username": "vimalselm3gmail.com",
+        "password": "Vilcolan@123"
+      }
+    ,
+    {
+      "id": 3,
+      "username": "kamalselvam3gmail.com",
+      "password": "kamal@123"
+    },
+    {
+      "id": 4,
+      "username": "krishna3gmail.com",
+      "password": "krishna@123"
+    }
+  ]
+}
