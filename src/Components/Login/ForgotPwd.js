@@ -1,15 +1,15 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import React,{useState} from 'react'
 
 const ForgotPwd = () => {
-    const navigate=useNavigate();
-    const handleNavigate=()=>{
-        navigate({pathname:"/"})
-    }
+  
   return (
     <div>
-        <button className='btn btn-warning' onClick={handleNavigate}>summma</button>
+            <div className='form-group'>
+            <label>Username</label>
+            <div className='my-2 user-box'>
+               <input type="text" placeholder="email" name='username' className='form-control' ></input>
+           </div>
+          </div> 
     </div>
   )
 }
