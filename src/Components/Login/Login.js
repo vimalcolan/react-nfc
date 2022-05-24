@@ -7,13 +7,13 @@ import './Login.css'
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-const[togglevisible,setTogglevisible]=useState(true);
+const[togglepwd,setTogglepwd]=useState(true);
 const[loginvalues,setLoginvalues]=useState({username:"",password:""});
 const[emailerrormsg,setEmailerrormsg]=useState("");
 const[pwderrormsg,setPwderrormsg]=useState("");
 const[exacterrormsg,setExacterrormsg]=useState("");
 const[successmsg,setSuccessmsg]=useState("");
-const[loginapi,setLoginapi]=useState();
+const[loginapi,setLoginapi]=useState([]);
 const navigate=useNavigate();
 useEffect(()=>{
   const user=async ()=>{
@@ -48,19 +48,26 @@ const loginHandler=(e)=>{
     
       // Matching exact db value and current value
       for(let i=0;i<loginapi.length;i++){
-        if((loginapi[i].username==loginvalues.username)&&(loginapi[i].password==loginvalues.password)){
+        if((loginapi[i].username===loginvalues.username)&&(loginapi[i].password===loginvalues.password)){
          navigate("/")
         }
         else{
           setExacterrormsg("please enter correct mail and password");
         }
       }
+      debugger;
+      // const filtered=loginapi.filter((e)=>{return e.includes(loginvalues)});
+      // console.log("filered",filtered);
+      // if(filtered.length>0){
+      //   navigate('/')
+      // }
+      
 } 
 
 
 // toggle password to text
-const handlePasswordVisible=()=>{
-  setTogglevisible(!togglevisible)
+const handlePasswordToggle=()=>{
+  setTogglepwd(!togglepwd)
 }
 
   return (
@@ -78,7 +85,7 @@ const handlePasswordVisible=()=>{
       <div className='login-box' >
         <div className='logo'>
           <div className='logo-wrapper'>
-            <img/>
+            
             <h4>NFC BUSINESS <span>CARD</span></h4>
           </div>
         </div>
@@ -97,8 +104,8 @@ const handlePasswordVisible=()=>{
           <div className='form-group'>
             <label>Password</label>
             <div className='my-2 user-box'>
-              <input type={togglevisible?"password":"text"} placeholder="password" name='password' className='form-control' onChange={formHandler} ></input>
-              <span className='mx-2' onClick={handlePasswordVisible}><img src={eyeIcon} alt="eye"/></span>
+              <input type={togglepwd?"password":"text"} placeholder="password" name='password' className='form-control' onChange={formHandler} ></input>
+              <span className='mx-2' onClick={handlePasswordToggle}><img src={eyeIcon} alt="eye"/></span>
            </div>
            {pwderrormsg.length >0 &&  <div style={{color:"#fff",fontSize:"16px",marginBottom:"10px"}}>{pwderrormsg}</div>}
           </div>
@@ -106,6 +113,7 @@ const handlePasswordVisible=()=>{
            <div className='my-4 text-center login-btn '>
              <button  type='submit' className='btn'>Login</button>
            </div>
+           <div className='forgot-txt d-flex flex-end' onClick={()=>{navigate('/forgot')}}>Forgot password?</div>
            {<div style={{color:"green",fontSize:"16px",marginBottom:"10px"}}>{successmsg}</div>}
        </form>
      

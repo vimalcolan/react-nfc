@@ -92,3 +92,50 @@ display: block;
 .overview h4{
     color: #fff;
 }
+.hided-profile{
+    position: absolute;
+    display: none;
+    top: 50px;
+ right: 20px;
+    background: #ccc;
+    z-index: 22;
+    padding:10px;
+}
+.hided-profile.show{
+    display: block;
+}
+.contacts-table-wrapper{
+    padding: 10px;
+    height: 100%;
+}
+.contacts-table-wrapper .input-wrapper{
+    border: 1px solid #2F3032;
+border-radius: 5px;
+padding: 12px 0 12px 25px;
+width: 100%;
+margin-left: 20px;
+}
+.contacts-table-wrapper .input-wrapper input{
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: #fff;
+    width: 100%;
+}
+.contacts-table-wrapper .search-field{
+    display: flex;
+    align-items: center;
+}
+.contacts-table-wrapper .table thead{
+    background: #000;border-radius: 5px;
+}
+.contacts-table-wrapper .table td,.contacts-table-wrapper .table th{
+    border: 0;
+}
+.dashboard .main-row .chart-wrapper,.dashboard .main-row .contacts-table-wrapper{
+    background: #1E1F22;
+    border-radius: 10px;
+}
+.contacts-table-wrapper h5{
+    color:#A7A7A7;
+}

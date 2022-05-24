@@ -1,25 +1,86 @@
 {
   "userdetails": [
     {
-      "id": 1,
       "username": "vimalselvam3@gmail.com",
-      "password": "Vimalcolan@123"
+      "password": "Raji@123",
+      "id": 1
     },
-      {
-        "id": 2,
-        "username": "vimalselm3gmail.com",
-        "password": "Vilcolan@123"
-      }
-    ,
+    {
+      "username": "kamalselvam3@gmail.com",
+      "password": "kamal@123",
+      "id": 2
+    },
     {
       "id": 3,
-      "username": "kamalselvam3gmail.com",
-      "password": "kamal@123"
+      "username": "arunkj@gmail.com",
+      "password": "arun@123"
     },
     {
-      "id": 4,
       "username": "krishna3gmail.com",
-      "password": "krishna@123"
+      "password": "Krishna@23",
+      "id": 4
+    },
+    {
+      "username": "raji@gmail.com",
+      "password": "raji@023",
+      "id": 5
+    }
+  ],
+  "chartDetails": [
+    {
+      "data": "41.6",
+      "label": "Washington DC",
+      "id": 1
+    },
+    {
+      "data": "26.1",
+      "label": "Los Angeles",
+      "id": 2
+    },
+    {
+      "data": "14",
+      "label": "North Coast",
+      "id": 3
+    },
+    {
+      "data": "9.1",
+      "label": "Green Basin",
+      "id": 4
+    },
+    {
+      "data": "41.5",
+      "label": "Central california",
+      "id": 5
+    }
+  ],
+  "contactDetails": [
+    {
+      "id": 1,
+      "name": "John Adam",
+      "jobTitle": "jobtitle1",
+      "mobileNumber": "+1 651-319-4767",
+      "emailId": "johnadam@gmail.com"
+    },
+    {
+      "id": 2,
+      "name": "Thomas Jefferson",
+      "jobTitle": "Job title1201",
+      "mobileNumber": "+1 651-319-4754",
+      "emailId": "thomasjefferson@gmail.com"
+    },
+    {
+      "id": 3,
+      "name": "Douglas Macaurthur",
+      "jobTitle": "Job title1202",
+      "mobileNumber": "+1 651-319-4364",
+      "emailId": "douglasmacaurthur@gmail.com"
+    },
+    {
+      "name": "Nicholas",
+      "jobTitle": "Job title1204",
+      "mobileNumber": "+1 651-319-4364",
+      "emailId": "nicholasmacaurthur@gmail.com",
+      "id": 4
     }
   ]
 }
