@@ -32,3 +32,6 @@ color: #2F3032;
 background: transparent;
 margin: 10px 0;
 }
+.add-form .form-control{
+    margin: 20px 0;
+}

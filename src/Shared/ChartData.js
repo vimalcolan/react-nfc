@@ -27,7 +27,8 @@ const ChartData = () => {
                             data:data,
                             backgroundColor:[ "#CA9C31",'#854095','#E37E06','#1170CB','#D9B648']
                         }], 
-                  labels:label
+                  labels:label,
+                
                 })
              }).catch(error=>console.log("error",error))
 

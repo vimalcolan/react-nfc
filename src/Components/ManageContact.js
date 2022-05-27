@@ -1,4 +1,5 @@
 import React,{useEffect, useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../Common/Sidebar'
 import Header from '../Common/Header';
 import '../Common/Common.css'
@@ -9,9 +10,14 @@ import deleteIcon from '../assets/images/trash.png';
 import axios from 'axios';
 
 const ManageContact = () => {
+    const navigate=useNavigate();
     const [togglemenu, setTogglemenu] = useState(false);
     const [titleHeader] = useState("Manage Contact");
     const[contactDetails,setContactDetails]=useState([]);
+    const[searchName,setsearchName]=useState("");
+    const handleChangeName=(e)=>{
+        setsearchName(e.target.value);
+    }
     const handleMenu = () => {
       setTogglemenu(!togglemenu);
     };
@@ -39,13 +45,13 @@ const ManageContact = () => {
                 <div className='right-side-content'>
                 <span className='sample-doc'>Sample Document Download</span>
                 <span className='bulk-upload mx-2'>Bulk Upload Contact</span>
-                <span><button className='btn btn-success'>Bulk Upload Contact</button></span>
+                <span><button className='btn btn-success' onClick={()=>{navigate('/add-contact')}}>Add Contact</button></span>
 
                 </div>
                </div>
                <div className='filter-row d-flex justify-content-between align-items-center'>
                    <label className='ml-2'>Filter</label>
-                   <input type="text" placeholder="Search by User Name..."/>
+                   <input type="text" placeholder="Search by User Name..." onChange={handleChangeName}/>
                    <input type="text" placeholder="Search by Job title..."/>
                    <input type="text" placeholder="Search by Mobile number..."/>
                    <input type="text" placeholder="Search by Email Id"/>
@@ -64,13 +70,20 @@ const ManageContact = () => {
                            </tr>
                        </thead>
                        <tbody>
-                      {contactDetails.map((e)=>(
+                      {contactDetails.filter(data=>{
+                          if(searchName===""||searchName===undefined){
+                              return data
+                          }
+                          else if(data.name.toLowerCase().includes(searchName.toLowerCase())){
+                              return data
+                          }
+                      }).map((e)=>(
                             <tr key={e.id}>
                                 <td>{e.id}</td>
                                 <td><span>{e.name}</span></td>
-                                <td>{e.jobTitle}</td>
-                                <td>{e.mobileNumber}</td>
-                                <td>{e.emailId}</td>
+                                <td>{e.title}</td>
+                                <td>{e.number}</td>
+                                <td>{e.mailId}</td>
                                 <td>
                                     <span><img src={view} alt="view" /></span>
                                     <span className='mx-2'><img src={edit} alt="edit" /></span>

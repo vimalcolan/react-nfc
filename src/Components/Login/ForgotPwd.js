@@ -20,7 +20,7 @@ useEffect(()=>{
 const forgotmailHandler=(e)=>{
   e.preventDefault();
   for(let i=0;i<apiusername.length;i++){
-    if(apiusername[i].username===user){
+    if(apiusername[i].email===user){
       console.log("yes");
 navigate('/reset');
 sessionStorage.setItem("authentication",apiusername[i].id)

@@ -41,7 +41,7 @@ const ResetPwd = () => {
     }
     if (newpwd.pwd === newpwd.confirmpwd) {
       axios
-        .put(`http://localhost:8001/userdetails/${pwdId}`, {username:apidata.username,password:newpwd.pwd})
+        .put(`http://localhost:8001/userdetails/${pwdId}`, {username:apidata.email,password:newpwd.pwd})
         .then((resp) => console.log(resp));
       navigate("/login");
     }

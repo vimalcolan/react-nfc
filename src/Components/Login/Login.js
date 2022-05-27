@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 const[togglepwd,setTogglepwd]=useState(true);
-const[loginvalues,setLoginvalues]=useState({username:"",password:""});
+const[loginvalues,setLoginvalues]=useState({email:"",password:""});
 const[emailerrormsg,setEmailerrormsg]=useState("");
 const[pwderrormsg,setPwderrormsg]=useState("");
 const[exacterrormsg,setExacterrormsg]=useState("");
@@ -37,7 +37,7 @@ const loginHandler=(e)=>{
   setSuccessmsg("");
 
       //  validation
-      const validateEmail=emailValidator(loginvalues.username);  
+      const validateEmail=emailValidator(loginvalues.email);  
       const validatePwd=passwordValidator(loginvalues.password);  
       console.log(validateEmail,validatePwd);
 
@@ -47,24 +47,28 @@ const loginHandler=(e)=>{
 
     
       // Matching exact db value and current value
-      for(let i=0;i<loginapi.length;i++){
-        if((loginapi[i].username===loginvalues.username)&&(loginapi[i].password===loginvalues.password)){
-         navigate("/")
-        }
-        else{
-          setExacterrormsg("please enter correct mail and password");
-        }
-      }
-      debugger;
-      // const filtered=loginapi.filter((e)=>{return e.includes(loginvalues)});
-      // console.log("filered",filtered);
-      // if(filtered.length>0){
-      //   navigate('/')
-      // }
+
       
-} 
+      // for(let i=0;i<loginapi.length;i++){
+      //   if((loginapi[i].email===loginvalues.email)&&(loginapi[i].password===loginvalues.password)){
+      //    navigate("/")
+      //   }
+      //   else{
+      //     setExacterrormsg("please enter correct mail and password");
+      //   }  
+      // } 
 
-
+     const filtered=loginapi.filter((e)=>{
+       return ((e.email===loginvalues.email)&&(e.password===loginvalues.password))
+     })
+     console.log("filtered",filtered);
+      if(filtered.length>0){
+        navigate('/');
+      }
+      else{
+            setExacterrormsg("please enter correct mail and password");
+          }  
+    }
 // toggle password to text
 const handlePasswordToggle=()=>{
   setTogglepwd(!togglepwd)
@@ -94,9 +98,9 @@ const handlePasswordToggle=()=>{
        <form onSubmit={loginHandler}>
           {exacterrormsg.length >0 &&  <div style={{color:"#fff",fontSize:"16px",marginBottom:"10px"}}>{exacterrormsg}</div>}
           <div className='form-group'>
-            <label>Username</label>
+            <label>email</label>
             <div className='my-2 user-box'>
-               <input type="text" placeholder="email" name='username' className='form-control' onChange={formHandler} ></input>
+               <input type="text" placeholder="email" name='email' className='form-control' onChange={formHandler} ></input>
            </div>
            {emailerrormsg.length >0 && <div style={{color:"#fff",fontSize:"16px",marginBottom:"10px"}}>{emailerrormsg}</div>}
           </div> 

@@ -1,29 +1,32 @@
 {
   "userdetails": [
     {
-      "username": "vimalselvam3@gmail.com",
-      "password": "Raji@123",
+      "email":"vimalselvam3@gmail.com",
+      "password": "Vimal@111",
       "id": 1
     },
     {
-      "username": "kamalselvam3@gmail.com",
-      "password": "kamal@123",
+      "email": "kamalselvam3@gmail.com",
+      "password": "Vimal@1112",
       "id": 2
     },
     {
       "id": 3,
-      "username": "arunkj@gmail.com",
-      "password": "arun@123"
+      "email": "arunkj@gmail.com",
+      "password": "arun@123",
+      "username": "arun"
     },
     {
-      "username": "krishna3gmail.com",
+      "email": "krishna3gmail.com",
       "password": "Krishna@23",
-      "id": 4
+      "id": 4,
+      "username": "krishna"
     },
     {
-      "username": "raji@gmail.com",
+      "email": "raji@gmail.com",
       "password": "raji@023",
-      "id": 5
+      "id": 5,
+      "username": "raji"
     }
   ],
   "chartDetails": [
@@ -57,30 +60,87 @@
     {
       "id": 1,
       "name": "John Adam",
-      "jobTitle": "jobtitle1",
-      "mobileNumber": "+1 651-319-4767",
-      "emailId": "johnadam@gmail.com"
+      "title": "jobtitle1",
+      "number": "+1 651-319-4767",
+      "mailId": "johnadam@gmail.com"
     },
     {
       "id": 2,
       "name": "Thomas Jefferson",
-      "jobTitle": "Job title1201",
-      "mobileNumber": "+1 651-319-4754",
-      "emailId": "thomasjefferson@gmail.com"
+      "title": "Job title1201",
+      "number": "+1 651-319-4754",
+      "mailId": "thomasjefferson@gmail.com"
     },
     {
       "id": 3,
       "name": "Douglas Macaurthur",
-      "jobTitle": "Job title1202",
-      "mobileNumber": "+1 651-319-4364",
-      "emailId": "douglasmacaurthur@gmail.com"
+      "title": "Job title1202",
+      "number": "+1 651-319-4364",
+      "mailId": "douglasmacaurthur@gmail.com"
     },
     {
       "name": "Nicholas",
-      "jobTitle": "Job title1204",
-      "mobileNumber": "+1 651-319-4364",
-      "emailId": "nicholasmacaurthur@gmail.com",
+      "title": "Job title1204",
+      "number": "+1 651-319-4364",
+      "mailId": "nicholasmacaurthur@gmail.com",
       "id": 4
+    },
+    {
+      "name": "Vimal",
+      "title": "UI developer",
+      "number": "9600408017",
+      "mailId": "vimalselvam3@gmail.com",
+      "id": 5
+    },
+    {
+      "name": "parandhu",
+      "title": "ui dev",
+      "number": "9876543210",
+      "mailId": "parandhu@gmail.com",
+      "id": 6
+    },
+    {
+      "name": "Jo Adam",
+      "title": "jobtle1",
+      "number": "+1 651-319767",
+      "mailId": "jnadam@gmail.com",
+      "id": 7
+    },
+    {
+      "name": "uyyyyyyyyyyy",
+      "title": "rttttttttttttt",
+      "number": "trtrtrtrtrtrerrrrr",
+      "mailId": "tey",
+      "organisation": "try",
+      "website": "tyr",
+      "facebook": "try",
+      "instagram": "ty",
+      "linkedIn": "try",
+      "id": 8
+    },
+    {
+      "name": "balaji",
+      "title": "ui dev",
+      "number": "9876543210",
+      "mailId": "balaji@gmail.com",
+      "organisation": "colan",
+      "website": "www.colan.in",
+      "facebook": "balaji kannnan",
+      "instagram": "balaji_11",
+      "linkedIn": "balaji kannan",
+      "id": 9
+    },
+    {
+      "name": "jana",
+      "title": "ui",
+      "number": "5454545",
+      "mailId": "4545",
+      "organisation": "454",
+      "website": "4545",
+      "facebook": "454",
+      "instagram": "4545",
+      "linkedIn": "4545",
+      "id": 10
     }
   ]
 }

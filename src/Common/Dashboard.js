@@ -13,6 +13,7 @@ const Dashboard = () => {
   const handleMenu = () => {
     setTogglemenu(!togglemenu);
   };
+  
   return (
     <>
       <div className="dashboard">
@@ -36,7 +37,7 @@ const Dashboard = () => {
                     <label className="text-white">Search</label>
                    <div className="input-wrapper d-flex">
                    <input type="text" placeholder="Search By User Name..." />
-                   <div className="search-icon"><img src={search} alt="search"/></div>
+                   <div className="search-icon" ><img src={search} alt="search"/></div>
                    </div>
                   </div>
                   <div className="contacts-table table-responsive mt-2">
