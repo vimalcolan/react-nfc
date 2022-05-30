@@ -19,18 +19,28 @@ useEffect(()=>{
 },[])
 const forgotmailHandler=(e)=>{
   e.preventDefault();
-  for(let i=0;i<apiusername.length;i++){
-    if(apiusername[i].email===user){
-      console.log("yes");
-navigate('/reset');
-sessionStorage.setItem("authentication",apiusername[i].id)
-    }
-  }
+//   for(let i=0;i<apiusername.length;i++){
+//     if(apiusername[i].email===user){
+//       console.log("yes");
+// navigate('/reset');
+// sessionStorage.setItem("authentication",apiusername[i].id)
+//     }
+//   }
+const userId=apiusername.filter((e)=>{
+  return(e.email===user);
+}).map((user)=>{return user.id});
+console.log("userrrrid",userId);
+// const userId=filtered.map(e=>(e.id));
+// console.log("filtered.restemilll",userId);
+if(userId.length){
+  navigate("/reset");
+  sessionStorage.setItem("authentication",userId)
+}
 
 }
   return (
     <>
-               <section>
+    <section>
     <div className='row login-page justify-content-between'>
       <div className='col-5'>
         <div className='right-side'>
@@ -48,7 +58,7 @@ sessionStorage.setItem("authentication",apiusername[i].id)
           </div>
         </div>
   <div className='login-sec container'>
-    <h5>Login</h5>
+    <h5>Forgot Password</h5>
        <form onSubmit={forgotmailHandler}>
          
           <div className='form-group'>
@@ -61,6 +71,9 @@ sessionStorage.setItem("authentication",apiusername[i].id)
            <div className='my-4 text-center login-btn '>
              <button  type='submit' className='btn'>submit</button>
            </div>
+          <div className='back-to-login'>
+            <span onClick={()=>{navigate("/login")}}>Back to login</span>
+          </div>
         
        </form>
      

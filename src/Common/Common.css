@@ -43,6 +43,7 @@ display: block;
     left: 0;
     transition: all .5s;
     min-height: calc(100vh - 84px);
+    min-height: calc(100% - 84px);
 }
 .sidebar-wrapper.hide{
     left: -100%;
@@ -97,9 +98,16 @@ display: block;
     display: none;
     top: 50px;
  right: 20px;
-    background: #ccc;
+background:  #1E1F22;
+border-radius: 10px;
     z-index: 22;
     padding:10px;
+}
+.hided-profile .btn{
+    background: #F26339 !important;
+    font-weight: 600;
+    border: 0;
+    outline: 0;
 }
 .hided-profile.show{
     display: block;

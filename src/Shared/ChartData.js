@@ -17,11 +17,11 @@ const ChartData = () => {
                 const label=[];
                 for (var i of resp.data){
                     label.push(i.label);
-                    console.log("label",label);
+                    // console.log("label",label);
                     data.push(i.data);
-                    console.log("data",data);
+                    // console.log("data",data);
                 }
-                console.log(resp.data);
+                // console.log(resp.data);
                 setChartValues({
                   datasets: [{
                             data:data,

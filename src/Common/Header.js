@@ -14,7 +14,10 @@ const Header = ({handleMenu,title}) => {
   const profilehidehandler=()=>{
     setprofilehide(!profilehide);
   }
- 
+ const handleLogout=()=>{
+   sessionStorage.removeItem("auth");
+   navigate("/login");
+ }
   return (
     <>
       <div className="header d-flex justify-content-between align-items-center">
@@ -44,9 +47,7 @@ const Header = ({handleMenu,title}) => {
             </div>
             <div className={profilehide?"hided-profile":"hided-profile show"}>
             <div className="profile-details">
-              <div className="d-flex" ><span className="profile-name text-white">Chris HermsWorth</span></div>
-              <div className="desg">Super Admin</div>
-              <button className="btn btn-success" onClick={()=>{navigate('/login')}}>logout</button>
+              <button className="btn btn-secondary" onClick={handleLogout}>logout</button>
             </div>
             </div>
           </div>

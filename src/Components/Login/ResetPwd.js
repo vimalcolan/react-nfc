@@ -41,9 +41,10 @@ const ResetPwd = () => {
     }
     if (newpwd.pwd === newpwd.confirmpwd) {
       axios
-        .put(`http://localhost:8001/userdetails/${pwdId}`, {username:apidata.email,password:newpwd.pwd})
+        .put(`http://localhost:8001/userdetails/${pwdId}`, {email:apidata.email,password:newpwd.pwd})
         .then((resp) => console.log(resp));
       navigate("/login");
+      sessionStorage.removeItem("authentication")
     }
     // else{
     //   return seterrormsg("ensure both values are same");
@@ -79,7 +80,7 @@ const ResetPwd = () => {
                 </div>
               </div>
               <div className="login-sec container">
-                <h5>Reset</h5>
+              <h5>Forgot Password</h5>
                 <form onSubmit={resetHandler}>
                   <div className="form-group">
                     <label>Password</label>
@@ -121,7 +122,7 @@ const ResetPwd = () => {
 
                   <div className="my-4 text-center login-btn ">
                     <button type="submit" className="btn">
-                      Login
+                     Submit
                     </button>
                   </div>
                   <div

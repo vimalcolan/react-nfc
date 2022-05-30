@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Header from "../Common/Header";
 import Sidebar from "../Common/Sidebar";
 import ChartData from "../Shared/ChartData";
@@ -14,6 +14,16 @@ const Dashboard = () => {
     setTogglemenu(!togglemenu);
   };
   
+  // Authentication
+  useEffect(()=>{
+    if(sessionStorage.getItem("auth")){
+      navigate("/")
+    }
+    else{
+      navigate("/login");
+    }
+  },[]);
+
   return (
     <>
       <div className="dashboard">

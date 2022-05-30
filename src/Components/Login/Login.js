@@ -60,15 +60,20 @@ const loginHandler=(e)=>{
 
      const filtered=loginapi.filter((e)=>{
        return ((e.email===loginvalues.email)&&(e.password===loginvalues.password))
-     })
+     });
+     const userEmail=filtered.map(e=>(e.email))
+     console.log("username",userEmail);
      console.log("filtered",filtered);
       if(filtered.length>0){
+        sessionStorage.setItem("auth",userEmail)
         navigate('/');
       }
       else{
             setExacterrormsg("please enter correct mail and password");
           }  
+         
     }
+
 // toggle password to text
 const handlePasswordToggle=()=>{
   setTogglepwd(!togglepwd)
@@ -113,11 +118,17 @@ const handlePasswordToggle=()=>{
            </div>
            {pwderrormsg.length >0 &&  <div style={{color:"#fff",fontSize:"16px",marginBottom:"10px"}}>{pwderrormsg}</div>}
           </div>
-          
+          <div className='d-flex justify-content-between'>
+            <div className='remember-me d-flex'>
+              <input type="checkbox"/>
+              <label>Remember me</label>
+            </div>
+            <div className='forgot-txt d-flex flex-end' onClick={()=>{navigate('/forgot')}}>Forgot password?</div>
+          </div>
            <div className='my-4 text-center login-btn '>
              <button  type='submit' className='btn'>Login</button>
            </div>
-           <div className='forgot-txt d-flex flex-end' onClick={()=>{navigate('/forgot')}}>Forgot password?</div>
+          
            {<div style={{color:"green",fontSize:"16px",marginBottom:"10px"}}>{successmsg}</div>}
        </form>
      
