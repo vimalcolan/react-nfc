@@ -16,21 +16,20 @@ import insta from '../assets/images/insta.png';
 import linkedIn from '../assets/images/linkedIn.png';
 import customFields from '../assets/images/customFields.png';
 import address from '../assets/images/address.png';
+import DashboardLayout from "../Common/DashboardLayout";
 
 const ViewContact = () => {
     const navigate=useNavigate();
-     const [titleHeader] = useState("Manage contact");
+     const title = "Manage contact";
   const [togglemenu, setTogglemenu] = useState(false);
+  
    // Authentication
    useEffect(()=>{
-    if(sessionStorage.getItem("auth")){
-      navigate("/view-contact")
-    }
-      else{
-          navigate("/login")
-      }
-    
+    if(sessionStorage.getItem("auth")===null){
+      navigate("/login")
+    } 
   },[])
+
 //   toggle menu
   const handleMenu = () => {
     setTogglemenu(!togglemenu);
@@ -49,16 +48,15 @@ console.log("viewContact",viewContact);
 
   return (
     <>
-    <div className="dashboard">
-        <Header handleMenu={handleMenu} title={titleHeader}/>
-        <div className="page-wrapper">
-            <Sidebar toggle={togglemenu} />
-            <div className="main-page view-page">
-                {/* {JSON.stringify(viewContact)} */}
+   
+
+
+<DashboardLayout title={title}>
+<div className="view-page">
                 <div className="header-row d-flex justify-content-between align-items-center">
                   <h4>CONTACT INFORMATION</h4>
                   <div className="back-btn">
-                    <span><img src={back} alt="back" className="me-2"/>Back</span>
+                    <span onClick={()=>{navigate('/manage-contact')}}><img src={back} alt="back" className="me-2"/>Back</span>
                   </div>
                 </div>
                 <div className="row">
@@ -142,9 +140,7 @@ console.log("viewContact",viewContact);
 
                 </div>
             </div>
-        </div>
-
-    </div>
+</DashboardLayout>
     </>
   )
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
+import {BrowserRouter,Route,Routes} from 'react-router-dom';
 import Login from '../Components/Login/Login'
 import Dashboard from '../Common/Dashboard'
 import ForgotPwd from '../Components/Login/ForgotPwd';
@@ -8,14 +8,19 @@ import ManageContact from '../Components/ManageContact';
 import AddContact from '../Components/AddContact';
 import Reports from '../Components/Reports';
 import ViewContact from '../Components/ViewContact';
-import EditContact from '../Components/EditContact';
+import EditContact from '../Components/EditContact'; 
+
+
 
 
 const RoutesFile = () => {
+ 
+ 
+
   return (
     <>
-    <Router>
-      <Routes>
+      <BrowserRouter>
+       <Routes>
         <Route path='/login' element={<Login/>} />
         <Route path='/' element={<Dashboard/>} />
         <Route  path='/forgot' element={<ForgotPwd/>} />
@@ -25,11 +30,8 @@ const RoutesFile = () => {
         <Route path='/reports' element={<Reports/>} />
         <Route path='/view-contact' element={<ViewContact/>} />
         <Route path='/edit-contact' element={<EditContact/>} />
-      
-
       </Routes>
-    </Router>
-
+      </BrowserRouter>
     </>
   )
 }

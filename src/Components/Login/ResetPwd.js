@@ -7,15 +7,13 @@ import axios from "axios";
 
 const ResetPwd = () => {
   const [togglepwd, setTogglepwd] = useState(true);
+  const [confirmPasswordToggle, setConfirmPasswordToggle] = useState(true);
   const [newpwd, setnewpwd] = useState({ pwd: "", confirmpwd: "" });
-  const [errormsg, seterrormsg] = useState("");
-  const [validpwd, setvalidpwd] = useState("");
+  const [pwderrormsg, setpwderrormsg] = useState("");
   const [apidata, setapidata] = useState("");
   const navigate = useNavigate();
 
   const pwdId = sessionStorage.getItem("authentication");
-  console.log(pwdId);
-
   useEffect(() => {
     const result = async () => {
       axios
@@ -24,7 +22,6 @@ const ResetPwd = () => {
     };
     result();
   }, []);
-  console.log(apidata);
 
   const formHandler = (e) => {
     setnewpwd({ ...newpwd, [e.target.name]: e.target.value });
@@ -32,33 +29,35 @@ const ResetPwd = () => {
 
   const resetHandler = (e) => {
     e.preventDefault();
-    seterrormsg("");
-    setvalidpwd("");
+    setpwderrormsg("");
 
     const passwordValidate = passwordValidator(newpwd.pwd);
-    if (!passwordValidate) {
-      setvalidpwd("please enter valid pwd");
-    }
-    if (newpwd.pwd === newpwd.confirmpwd) {
+    if ((newpwd.pwd === newpwd.confirmpwd) && passwordValidate) {
       axios
         .put(`http://localhost:8001/userdetails/${pwdId}`, {email:apidata.email,password:newpwd.pwd})
-        .then((resp) => console.log(resp));
       navigate("/login");
       sessionStorage.removeItem("authentication")
     }
-    // else{
-    //   return seterrormsg("ensure both values are same");
-    // }
-    // if(newpwd.pwd===newpwd.confirmpwd){
-    //   navigate("/login")
-    //   console.log("yes");
-    //  }
-  };
+    else{
+      if(!passwordValidate){
+        setpwderrormsg("please enter valid password");
+      }
+      if(newpwd.pwd == "" && newpwd.confirmpwd == ""){
+        setpwderrormsg("please enter password");
+      }
+      if(newpwd.pwd !== newpwd.confirmpwd){
+        setpwderrormsg("Password didn't match");
+      }
+    }
+  }
 
   // toggle password to text
   const handlePasswordToggle = () => {
     setTogglepwd(!togglepwd);
   };
+  const handleConfirmPasswordToggle=()=>{
+    setConfirmPasswordToggle(!confirmPasswordToggle);
+  }
   return (
     <>
       <section>
@@ -97,29 +96,24 @@ const ResetPwd = () => {
                       </span>
                     </div>
                   </div>
-
                   <div className="form-group">
                     <label>Password</label>
                     <div className="my-2 user-box">
                       <input
-                        type={togglepwd ? "password" : "text"}
+                        type={confirmPasswordToggle ? "password" : "text"}
                         placeholder="Confirm password"
                         name="confirmpwd"
                         className="form-control"
                         onChange={formHandler}
                       ></input>
-                      <span className="mx-2" onClick={handlePasswordToggle}>
+                      <span className="mx-2" onClick={handleConfirmPasswordToggle}>
                         <img src={eyeIcon} alt="eye" />
                       </span>
                     </div>
                   </div>
-                  {errormsg.length > 0 && (
-                    <div className="error-text">{errormsg}</div>
+                  {pwderrormsg.length > 0 && (
+                    <div className="error-text">{pwderrormsg}</div>
                   )}
-                  {validpwd.length > 0 && (
-                    <div className="error-text">{validpwd}</div>
-                  )}
-
                   <div className="my-4 text-center login-btn ">
                     <button type="submit" className="btn">
                      Submit

@@ -1,31 +1,36 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Header from "../Common/Header";
-import Sidebar from "../Common/Sidebar";
 import "../Common/Common.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import logoImg from "../assets/images/logoImg.png";
-import userIcon from "../assets/images/userIcon.png";
+import { emailValidator, mobileNumvalidator } from "../Shared/Regex";
+import { FiPhoneCall } from "react-icons/fi";
+import { HiOutlineMail } from "react-icons/hi";
+import { BsInstagram, BsGlobe2 } from "react-icons/bs";
+import { ImFacebook } from "react-icons/im";
+import { GrLinkedinOption } from "react-icons/gr";
+import { GoBriefcase } from "react-icons/go";
+import { HiOutlineUser } from "react-icons/hi";
+import { IconContext } from "react-icons";
+import { MdOutlineGroups } from "react-icons/md";
+import DashboardLayout from "../Common/DashboardLayout";
 
 const AddContact = () => {
   const navigate = useNavigate();
-  const [titleHeader] = useState("Manage contact");
-  const [togglemenu, setTogglemenu] = useState(false);
+  const titleHeader = "Manage contact";
+  const [nameError, setNameError] = useState("");
+  const [numError, setNumError] = useState("");
+  const [emailError, setEmailError] = useState("");
+
   // Authentication
   useEffect(() => {
-    if (sessionStorage.getItem("auth")) {
-      navigate("/add-contact");
-    } else {
+    if (sessionStorage.getItem("auth") === null) {
       navigate("/login");
     }
   }, []);
-  // toggle menu
-  const handleMenu = () => {
-    setTogglemenu(!togglemenu);
-  };
-  // post values
+
+  // create post values
   const [contact, setContact] = useState({
     name: "",
     title: "",
@@ -35,274 +40,403 @@ const AddContact = () => {
     website: "",
     facebook: "",
     instagram: "",
-    linkedIn: "",
+    linkedIn: ""
   });
   const handleChange = (e) => {
     setContact({ ...contact, [e.target.name]: e.target.value });
   };
+
+  // Add label
+  const [newLabel, setNewLabel] = useState([ { label: "Secondary Phone Number" } ]);
+  const [labelChange, SetLabelChange] = useState({ label: "" });
+
+  const labelChangeHandler = (e) => {
+    SetLabelChange({ label: e.target.value });
+  };
+  const handleSubmitLabel = () => {
+    setNewLabel([...newLabel, labelChange]);
+    console.log("new labaleee", newLabel);
+  };
+
+  const removeLabel = (removeId) => {
+    const sampleLabels = [...newLabel];
+    sampleLabels.splice(removeId, 1);
+    setNewLabel(sampleLabels);
+  };
+ 
+  // post values
   const addContact = (e) => {
     e.preventDefault();
-    if (contact.name !== "" && contact.number !== "") {
+    setNameError("");
+    setNumError("");
+    setEmailError("");
+
+    const numberValidate = mobileNumvalidator(contact.number);
+    const emailValidate = emailValidator(contact.mailId);
+
+  //  contact.push(addedValues);
+  //   console.log(("addedValuessarraty",addedValues));
+    if (contact.name !== "" && numberValidate && emailValidate) {
       const postData = async () => {
-        await axios
-          .post(" http://localhost:8001/contactDetails", contact)
-          .then((data) => console.log(data.data));
+        await axios.post(" http://localhost:8001/contactDetails", contact);
       };
       postData();
-      // toast.success("Contact updated successfully", {
-      //   position: toast.POSITION.TOP_RIGHT,
-      // });
       navigate("/manage-contact");
+    } else {
+      if (contact.name == "") {
+        setNameError("please Enter name");
+      }
+      if (contact.number == "") {
+        setNumError("please enter mobile number");
+      }
+      if (contact.number && !numberValidate) {
+        setNumError("please enter valid mobile number");
+      }
+      if (contact.mailId == "") {
+        setEmailError("please enter mail id");
+      }
+      if (contact.mailId && !emailValidate) {
+        setEmailError("please enter valid email id");
+      }
+      if (contact.name == "" && contact.number == "" && contact.mailId == "") {
+        toast.error("please enter values in required fields", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     }
   };
 
+  // image upload
+  const [imgUpload, setImgUpload] = useState(
+    "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
+  );
 
-// add label
+  const imgHandler = (e) => {
+    const file = new FileReader();
+    file.onload = () => {
+      if (file.readyState === 2) {
+        setImgUpload(file.result);
+      }
+    };
+    file.readAsDataURL(e.target.files[0]);
+  };
+  // remove image
+  const removeLogo = () => {
+    setImgUpload(
+      "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
+    );
+  };
 
+  
 
-// const[previousData,setPreviouData]=useState();
-// useEffect(()=>{
-//   const fetchData=async()=>{
-//     await axios.get("http://localhost:8001/contactDetails").then(res=>setPreviouData(res.data))
-//    }
-//    fetchData();
-// },[])
-//  console.log("prev",previousData);
-
-
-// const handleAddLabel=(e)=>{
-//   e.preventDefault();
- 
-// const dataAdded=[...previousData];
-// debugger;
-// console.log("data added",dataAdded);
-// if (contact.name !== "" && contact.number !== "") {
-//   const postData = async () => {
-//     await axios
-//       .post(" http://localhost:8001/contactDetails", contact)
-//       .then((data) => console.log(data.data));
-//   };
-//   postData();
-// }
-// }
   return (
     <>
-      <div className="dashboard">
-        <Header handleMenu={handleMenu} title={titleHeader} />
-        <div className="page-wrapper">
-          <Sidebar toggle={togglemenu} />
-          <div className="main-page">
-            <h4 className="text-white">Contact Form</h4>
-            <div className="add-page-content ">
-              <div className="header-row d-flex justify-content-between align-items-center">
-                <h5>Add/Edit Form</h5>
-                <button className="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Field</button>
-              </div>
-              <div className="input-logo-sec">
-                <div className="input-logo-wrapper">
-                 <div className="img-wrapper"> <img src={logoImg} alt="logo" /></div>
-                  <span className="change-logo">Change LOGO</span>
-                  <span className="remove-logo">Remove Photo</span>
-                </div>
-              </div>
-              <div className="basic-info-head">
-                <h5>Basic Information</h5>
-              </div>
-              <form onSubmit={addContact} className="add-form">
-              <div className="row">
-                <div className="col-lg-4">
-                 
-                   <div className="input-sec">
-                     <label>Name</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      placeholder="name"
-                      name="name"
-                      onChange={handleChange}
-                      value={contact.name}
-                    />
-                    </div>
-                   </div>
-                  </div>
-               
-                <div className="col-lg-4">
-                  <div className="input-sec">
-                     <label>Job title</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="title"
-                      onChange={handleChange}
-                      value={contact.title}
-                    />
-                    </div>
-                   </div>
-                </div>
-                <div className="col-lg-4">
-                
-                  <div className="input-sec">
-                     <label>Mobile number</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="number"
-                      onChange={handleChange}
-                      value={contact.number}
-                    />
-                    </div>
-                   </div>
-                </div>
-                <div className="col-lg-4">
-                <div className="input-sec">
-                     <label>Email id</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="mailId"
-                      onChange={handleChange}
-                      value={contact.mailId}
-                    />
-                    </div>
-                   </div>
-                </div>
-                <div className="col-lg-4">
-                <div className="input-sec">
-                     <label>Organisation</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="organisation"
-                      onChange={handleChange}
-                      value={contact.organisation}
-                    />
-                    </div>
-                   </div>
-                </div>
-                <div className="col-lg-4">
-                <div className="input-sec">
-                     <label>Website</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="website"
-                      onChange={handleChange}
-                      value={contact.website}
-                    />
-                    </div>
-                   </div>
-                </div>
-                <div className="col-lg-4">
-                <div className="input-sec">
-                     <label>Facebook</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="facebook"
-                      onChange={handleChange}
-                      value={contact.facebook}
-                    />
-                    </div>
-                   </div>
-                </div>
-                <div className="col-lg-4">
-                <div className="input-sec">
-                     <label>Instagram</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="instagram"
-                      onChange={handleChange}
-                      value={contact.instagram}
-                    />
-                    </div>
-                   </div>
-                </div>
-                <div className="col-lg-4">
-                <div className="input-sec">
-                     <label>Linked In</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="linkedIn"
-                      onChange={handleChange}
-                      value={contact.linkedIn}
-                    />
-                    </div>
-                   </div>
-                </div>
-                {/* <div className="col-lg-4">
-                <div className="input-sec">
-                     <label>Linked In</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="name"
-                      onChange={handleChange}
-                      value={contact.linkedIn}
-                    />
-                    </div>
-                   </div>
-                </div> */}
-                <div className="col-lg-12 ">
-                 <div className="buttons d-flex justify-content-center">
-                 <button className="btn update m-2" type="submit">
-                    Update
-                  </button>
-                  <button className="btn cancel m-2" >
-                   cancel
-                  </button>
-                 </div>
-                  <ToastContainer />
-                </div>
-              </div>
-            </form>
-
+      <DashboardLayout title={titleHeader}>
+        <div className="add-page">
+          <h4 className="text-white">Contact Form</h4>
+          <div className="add-page-content ">
+            <div className="header-row d-flex justify-content-between align-items-center">
+              <h5>Add/Edit Form</h5>
+              <button
+                className="btn"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                Add Field
+              </button>
             </div>
-          
+            <div className="input-logo-sec">
+              <div className="input-logo-wrapper d-flex align-items-center">
+                <div className="img-wrapper me-2">
+                  {" "}
+                  <img src={imgUpload} alt="logo" />
+                </div>
+                <div className="logo-change">
+                  <input
+                    type="file"
+                    id="input"
+                    className="img-upload"
+                    accept="image/*"
+                    onChange={imgHandler}
+                  />
+                  <label htmlFor="input">
+                    {" "}
+                    <span className="change-logo">CHANGE LOGO</span>
+                  </label>
+                </div>
+                <span className="remove-logo text-white" onClick={removeLogo}>
+                  REMOVE PHOTO
+                </span>
+              </div>
+            </div>
+            <div className="basic-info-head">
+              <h5>Basic Information</h5>
+            </div>
+            <IconContext.Provider value={{ size: "20px", color: "#858585" }}>
+              <form onSubmit={addContact} className="add-form">
+                <div className="row">
+                  <div className="col-lg-4">
+                    <div className="input-sec">
+                      <label>Name</label>
+                      <span className="required">*</span>
+                      <div className="input-wrapper">
+                        <div className="input-logo">
+                          <HiOutlineUser />
+                        </div>
+                        <input
+                          placeholder="Enter Name"
+                          name="name"
+                          onChange={handleChange}
+                          value={contact.name}
+                        />
+                      </div>
+                      <div className="required">{nameError}</div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="input-sec">
+                      <label>Job title</label>
+                      <div className="input-wrapper">
+                        <div className="input-logo">
+                          <GoBriefcase />
+                        </div>
+                        <input
+                          className="form-control"
+                          placeholder="Enter Job Title"
+                          name="title"
+                          onChange={handleChange}
+                          value={contact.title}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="input-sec">
+                      <label>Mobile number</label>
+                      <span className="required">*</span>
+                      <div className="input-wrapper">
+                        <div className="input-logo">
+                          <FiPhoneCall />
+                        </div>
+                        <input
+                          className="form-control"
+                          placeholder="Enter Phone Number"
+                          name="number"
+                          onChange={handleChange}
+                          value={contact.number}
+                        />
+                      </div>
+                      <div className="required">{numError}</div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="input-sec">
+                      <label>Email id</label>
+                      <span className="required">*</span>
+                      <div className="input-wrapper">
+                        <div className="input-logo">
+                          <HiOutlineMail />
+                        </div>
+                        <input
+                          className="form-control"
+                          placeholder="Enter Email ID"
+                          name="mailId"
+                          onChange={handleChange}
+                          value={contact.mailId}
+                        />
+                      </div>
+                      <div className="required">{emailError}</div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="input-sec">
+                      <label>Organisation</label>
+                      <div className="input-wrapper">
+                        <div className="input-logo">
+                          <MdOutlineGroups />
+                        </div>
+                        <input
+                          className="form-control"
+                          placeholder="Enter Organisation"
+                          name="organisation"
+                          onChange={handleChange}
+                          value={contact.organisation}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="input-sec">
+                      <label>Website</label>
+                      <div className="input-wrapper">
+                        <div className="input-logo">
+                          <BsGlobe2 />
+                        </div>
+                        <input
+                          className="form-control"
+                          placeholder="Enter Website"
+                          name="website"
+                          onChange={handleChange}
+                          value={contact.website}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="input-sec">
+                      <label>Facebook</label>
+                      <div className="input-wrapper">
+                        <div className="input-logo">
+                          <ImFacebook />
+                        </div>
+                        <input
+                          className="form-control"
+                          placeholder="Enter Facebook link"
+                          name="facebook"
+                          onChange={handleChange}
+                          value={contact.facebook}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="input-sec">
+                      <label>Instagram</label>
+                      <div className="input-wrapper">
+                        <div className="input-logo">
+                          <BsInstagram />
+                        </div>
+                        <input
+                          className="form-control"
+                          placeholder="Enter Instagram link"
+                          name="instagram"
+                          onChange={handleChange}
+                          value={contact.instagram}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="input-sec">
+                      <label>Linked In</label>
+                      <div className="input-wrapper">
+                        <div className="input-logo">
+                          <GrLinkedinOption />
+                        </div>
+                        <input
+                          className="form-control"
+                          placeholder="Enter LinkedIn link"
+                          name="linkedIn"
+                          onChange={handleChange}
+                          value={contact.linkedIn}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {newLabel.map((e, index) => {
+                    return (
+                      <div key={index} className="col-lg-4">
+                        <div className="input-sec">
+                          <label>{e.label}</label>
+                          <div className="input-wrapper">
+                            <input
+                              className="form-control"
+                              placeholder={"Enter " + e.label}
+                              name={e.label}
+                              onChange={handleChange}
+                            />
+                            <div
+                              className="input-logo"
+                              onClick={() => {
+                                removeLabel(index);
+                              }}
+                            >
+                              <GrLinkedinOption />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {
+                    // ( newLabel.map((e)=>{
+                    //   return (
+                    //     <div className="col-lg-4">
+                    //     <div className="input-sec">
+                    //          <label>{e.new}</label>
+                    //         <div className="input-wrapper">
+                    //           <div className="input-logo"><GrLinkedinOption/></div>
+                    //         <input
+                    //           className="form-control"
+                    //           placeholder={"Enter" + e.new}
+                    //           name={e.new}
+                    //           onChange={handleChange}
+                    //         />
+                    //         </div>
+                    //        </div>
+                    //     </div>
+                    //   )
+                    // }))
+                  }
+                </div>
+                <div className="row">
+                  <div className="col-lg-12 ">
+                    <div className="buttons d-flex justify-content-center">
+                      <button className="btn update m-2" type="submit">
+                        Update
+                      </button>
+                      <button className="btn cancel m-2">cancel</button>
+                    </div>
+                    <ToastContainer />
+                  </div>
+                </div>
+              </form>
+            </IconContext.Provider>
+          </div>
+        </div>
+      </DashboardLayout>
+
+      <div className="modal fade" id="exampleModal">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Add label
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body">
+              <h5>
+                <label>Label Name</label>
+              </h5>
+              <input type="text" onChange={labelChangeHandler} />
+            </div>
+            <div className="modal-footer d-flex justify-content-between">
+              <button
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onClick={handleSubmitLabel}
+              >
+                save
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-
-<div className="modal fade" id="exampleModal" >
-  <div className="modal-dialog">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">Add label</h5>
-        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-     <form>
-     <div className="modal-body">
-        <h5>Label Name</h5>
-        <input type="text"  />
-      </div>
-      <div className="modal-footer d-flex justify-content-between">
-        <button className="btn btn-secondary" data-bs-dismiss="modal" type="submit">save</button>
-        <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-      </div>
-     </form>
-    </div>
-  </div>
-</div>
     </>
   );
 };

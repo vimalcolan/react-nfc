@@ -12,9 +12,9 @@ const[loginvalues,setLoginvalues]=useState({email:"",password:""});
 const[emailerrormsg,setEmailerrormsg]=useState("");
 const[pwderrormsg,setPwderrormsg]=useState("");
 const[exacterrormsg,setExacterrormsg]=useState("");
-const[successmsg,setSuccessmsg]=useState("");
 const[loginapi,setLoginapi]=useState([]);
 const navigate=useNavigate();
+
 useEffect(()=>{
   const user=async ()=>{
   await axios.get("http://localhost:8001/userdetails").then(res=>setLoginapi(res.data));
@@ -30,48 +30,36 @@ const formHandler = (e)=>{
 
 const loginHandler=(e)=>{
   e.preventDefault();
-  console.log(loginvalues);
   setEmailerrormsg("");
   setPwderrormsg("");
   setExacterrormsg("");
-  setSuccessmsg("");
 
       //  validation
       const validateEmail=emailValidator(loginvalues.email);  
       const validatePwd=passwordValidator(loginvalues.password);  
-      console.log(validateEmail,validatePwd);
-
-      //  Error message
-      if(!validateEmail) return setEmailerrormsg("please enter valid email");
-      if(!validatePwd) return setPwderrormsg("please enter password in the combination of small letters,capital letters,numeric digits,special chracters");
-
-    
+     
       // Matching exact db value and current value
-
-      
-      // for(let i=0;i<loginapi.length;i++){
-      //   if((loginapi[i].email===loginvalues.email)&&(loginapi[i].password===loginvalues.password)){
-      //    navigate("/")
-      //   }
-      //   else{
-      //     setExacterrormsg("please enter correct mail and password");
-      //   }  
-      // } 
-
      const filtered=loginapi.filter((e)=>{
        return ((e.email===loginvalues.email)&&(e.password===loginvalues.password))
      });
-     const userEmail=filtered.map(e=>(e.email))
-     console.log("username",userEmail);
-     console.log("filtered",filtered);
-      if(filtered.length>0){
+     const userEmail=filtered.map(e=>(e.email));
+
+      if(filtered.length>0 && validateEmail && validatePwd){
         sessionStorage.setItem("auth",userEmail)
         navigate('/');
+        // window.location.reload(false);
       }
-      else{
-            setExacterrormsg("please enter correct mail and password");
-          }  
-         
+     else{
+      if(validateEmail&&validatePwd && filtered.length==0){
+        setExacterrormsg("please enter correct mail and password");
+       }
+        if(!validateEmail){
+          setEmailerrormsg("please enter valid email");
+        }
+        if(!validatePwd) {
+          setPwderrormsg("please enter password in the combination of small,caps,numeric & special chracters")
+        }
+     }     
     }
 
 // toggle password to text
@@ -79,6 +67,14 @@ const handlePasswordToggle=()=>{
   setTogglepwd(!togglepwd)
 }
 
+useEffect(()=>{
+  if(sessionStorage.getItem("auth")){
+    navigate("/");
+  }
+  else{
+    navigate("/login");
+  }
+},[])
   return (
     <>
     <section>
@@ -128,8 +124,6 @@ const handlePasswordToggle=()=>{
            <div className='my-4 text-center login-btn '>
              <button  type='submit' className='btn'>Login</button>
            </div>
-          
-           {<div style={{color:"green",fontSize:"16px",marginBottom:"10px"}}>{successmsg}</div>}
        </form>
      
    

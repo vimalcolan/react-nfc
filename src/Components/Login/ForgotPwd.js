@@ -1,13 +1,15 @@
 import axios from 'axios';
 import React,{useEffect, useState} from 'react'
+import { emailValidator } from '../../Shared/Regex';
 import {useNavigate } from 'react-router-dom';
 import loginBg from '../../assets/images/login-bg.png'
 
 const ForgotPwd = () => {
-
 const [user, setUser] = useState("");
-const [apiusername, setApiusername] = useState('')
+const [apiusername, setApiusername] = useState('');
+const [emailError,setEmailError]=useState("");
 const navigate=useNavigate();
+
 const formHandler=(e)=>{
   setUser(e.target.value);
 }
@@ -16,27 +18,32 @@ useEffect(()=>{
     await axios.get("http://localhost:8001/userdetails").then(res=>setApiusername(res.data));
   }
   result();
-},[])
+},[]);
+
 const forgotmailHandler=(e)=>{
   e.preventDefault();
-//   for(let i=0;i<apiusername.length;i++){
-//     if(apiusername[i].email===user){
-//       console.log("yes");
-// navigate('/reset');
-// sessionStorage.setItem("authentication",apiusername[i].id)
-//     }
-//   }
+  // validation
+  const emailValidate=emailValidator(user);
+// matching db value with entered value
 const userId=apiusername.filter((e)=>{
   return(e.email===user);
 }).map((user)=>{return user.id});
-console.log("userrrrid",userId);
-// const userId=filtered.map(e=>(e.id));
-// console.log("filtered.restemilll",userId);
-if(userId.length){
+
+if(userId.length && emailValidate){
   navigate("/reset");
   sessionStorage.setItem("authentication",userId)
 }
-
+else{
+  if(user==""){
+    setEmailError("Please Enter Email")
+  }
+  if(user && !emailValidate){
+    setEmailError("please enter valid email")
+  }
+  if(user && emailValidate && userId.length==0){
+    setEmailError("Mail id not exists")
+  }
+}
 }
   return (
     <>
@@ -68,6 +75,7 @@ if(userId.length){
            </div>
            
           </div> 
+          {emailError}
            <div className='my-4 text-center login-btn '>
              <button  type='submit' className='btn'>submit</button>
            </div>

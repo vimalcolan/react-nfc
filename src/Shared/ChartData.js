@@ -11,14 +11,28 @@ const ChartData = () => {
     const[chartValues,setChartValues]=useState({datasets: [],labels:[]});
      useEffect(()=>{
          const chartResponse=async()=>{
-             await axios.get("http://localhost:8001/chartDetails")
-             .then(resp=>{
+             await axios.get("http://localhost:8001/reports")
+             .then(resp=>resp.data).then(response=>{
                 const data=[];
                 const label=[];
-                for (var i of resp.data){
-                    label.push(i.label);
+
+                // get unique
+                // const label = response.from(new Set(location));
+                // const uniqueNames=[];
+                // const labelArray=response.filter((e,index)=>{
+                // return  (e.location)
+                // });
+                // label.push(labelArray);
+
+
+
+                for (var i of response){
+                
+                 label.push(i.location)
+               
+                    
                     // console.log("label",label);
-                    data.push(i.data);
+                    data.push(i.taps);
                     // console.log("data",data);
                 }
                 // console.log(resp.data);

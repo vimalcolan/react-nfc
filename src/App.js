@@ -1,13 +1,25 @@
+import React from "react";
 import './App.css';
 import RoutesFile from './Routes/RoutesFile';
+import "./Common/Common.css";
+
+
+
 
 function App() {
+
   
-  return (
+
+  return(
     <>
-    <RoutesFile/>
+     
+     <RoutesFile/>
+     
     </>
-  );
+   
+  )
+
+  
 }
 
 export default App;

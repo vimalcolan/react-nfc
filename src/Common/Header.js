@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useContext} from "react";
 import '../Common/Common.css'
 import logo from '../assets/images/NFC-logo.png'
 import menu from '../assets/images/hamburger-menu.png'
@@ -8,7 +8,7 @@ import dropdown from '../assets/images/profile-dropdown.png'
 import { useNavigate } from "react-router-dom";
 
 
-const Header = ({handleMenu,title}) => {
+const Header = (props) => {
   const navigate=useNavigate();
   const [profilehide, setprofilehide] = useState(true);
   const profilehidehandler=()=>{
@@ -17,6 +17,7 @@ const Header = ({handleMenu,title}) => {
  const handleLogout=()=>{
    sessionStorage.removeItem("auth");
    navigate("/login");
+  //  window.location.reload(false);
  }
   return (
     <>
@@ -28,8 +29,8 @@ const Header = ({handleMenu,title}) => {
           </div>
           <div className="d-flex">
             <div className="menu-icon d-flex align-items-center">
-              <img className="mx-2" src={menu} alt="menu" onClick={handleMenu} />
-              <span>{title}</span>
+              <img className="mx-2" src={menu} alt="menu" onClick={props.handleMenu} />
+              <span>{props.title}</span>
             </div>
           </div>
         </div>

@@ -8,10 +8,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import logoImg from "../assets/images/logoImg.png";
 import userIcon from "../assets/images/userIcon.png";
+import DashboardLayout from "../Common/DashboardLayout";
 
 const EditContact = () => {
   const navigate=useNavigate();
-  const [titleHeader] = useState("Manage contact");
+  const title = "Manage contact";
   const [togglemenu, setTogglemenu] = useState(false);
    // Authentication
    useEffect(()=>{
@@ -23,10 +24,6 @@ const EditContact = () => {
       }
     
   },[])
-  // toggle menu
-  const handleMenu = () => {
-    setTogglemenu(!togglemenu);
-  };
   const[editData,setEditdata]=useState( {name: "",
   title: "",
   number: "",
@@ -67,11 +64,9 @@ const EditContact = () => {
 
   return (
     <>
-      <div className="dashboard">
-        <Header handleMenu={handleMenu} title={titleHeader} />
-        <div className="page-wrapper">
-         <Sidebar toggle={togglemenu} />
-          <div className="main-page">
+ 
+<DashboardLayout title={title}>
+<div className="edit-page">
           <h4 className="text-white">Contact Form</h4>
             <div className="add-page-content ">
               <div className="header-row d-flex justify-content-between align-items-center">
@@ -229,21 +224,7 @@ const EditContact = () => {
                     </div>
                    </div>
                 </div>
-                {/* <div className="col-lg-4">
-                <div className="input-sec">
-                     <label>Linked In</label>
-                    <div className="input-wrapper">
-                      <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                      className="form-control"
-                      placeholder="name"
-                      name="name"
-                      onChange={handleChange}
-                      value={contact.linkedIn}
-                    />
-                    </div>
-                   </div>
-                </div> */}
+               
                 <div className="col-lg-12 ">
                  <div className="buttons d-flex justify-content-center">
                  <button className="btn update m-2" type="submit">
@@ -260,9 +241,7 @@ const EditContact = () => {
 
             </div>
           </div>
-         
-        </div>
-      </div>
+</DashboardLayout>
     </>
   );
 }
