@@ -17,8 +17,9 @@ const Header = (props) => {
  const handleLogout=()=>{
    sessionStorage.removeItem("auth");
    navigate("/login");
-  //  window.location.reload(false);
  }
+  // username
+  const username=sessionStorage.getItem("auth");
   return (
     <>
       <div className="header d-flex justify-content-between align-items-center">
@@ -43,7 +44,7 @@ const Header = (props) => {
               <img src={profilePic} alt="profile" />
             </div>
             <div className="profile-details">
-              <div className="d-flex" ><span className="profile-name text-white">Chris HermsWorth</span><span className="ms-2"><img src={dropdown} alt="dropdown" onClick={profilehidehandler}/></span> </div>
+              <div className="d-flex" ><span className="profile-name text-white">{username}</span><span className="ms-2"  onClick={profilehidehandler}><img src={dropdown} alt="dropdown"/></span> </div>
               <div className="desg">Super Admin</div>
             </div>
             <div className={profilehide?"hided-profile":"hided-profile show"}>

@@ -390,7 +390,12 @@ display: none;
 .upload-form{
   display: none;
 }
-
+.new-input-sec .input-wrapper{
+  padding: 0;
+}
+.new-input-sec input{
+  padding-right: 10px !important;
+}
 /* ------------------------------------------View page ----------------------------------------------- */
   .view-page h4{
     font-weight: 500;

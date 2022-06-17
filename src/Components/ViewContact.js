@@ -1,41 +1,33 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Header from "../Common/Header";
-import Sidebar from "../Common/Sidebar";
-import "../Common/Common.css";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import "../Common/Common.css"
 import back from '../assets/images/back.png'
-import name from '../assets/images/name.png';
-import title from '../assets/images/title.png';
-import number from '../assets/images/number.png';
-import mailId from '../assets/images/mailId.png';
-import organisation from '../assets/images/organisation.png';
-import website from '../assets/images/website.png';
-import facebook from '../assets/images/fb.png';
-import insta from '../assets/images/insta.png';
-import linkedIn from '../assets/images/linkedIn.png';
-import customFields from '../assets/images/customFields.png';
-import address from '../assets/images/address.png';
-import DashboardLayout from "../Common/DashboardLayout";
+import name from '../assets/images/name.png'
+import title from '../assets/images/title.png'
+import number from '../assets/images/number.png'
+import mailId from '../assets/images/mailId.png'
+import organisation from '../assets/images/organisation.png'
+import website from '../assets/images/website.png'
+import facebook from '../assets/images/fb.png'
+import insta from '../assets/images/insta.png'
+import linkedIn from '../assets/images/linkedIn.png'
+import customFields from '../assets/images/customFields.png'
+import address from '../assets/images/address.png'
+import DashboardLayout from "../Common/DashboardLayout"
 
 const ViewContact = () => {
     const navigate=useNavigate();
      const title = "Manage contact";
-  const [togglemenu, setTogglemenu] = useState(false);
+       const id=2;
   
    // Authentication
    useEffect(()=>{
     if(sessionStorage.getItem("auth")===null){
       navigate("/login")
     } 
-  },[])
-
-//   toggle menu
-  const handleMenu = () => {
-    setTogglemenu(!togglemenu);
-  }
-
-
+  },[]);
+  
   const[viewContact,setviewContact]=useState({})
   const ViewContactId=sessionStorage.getItem("viewId");
   useEffect(()=>{
@@ -51,7 +43,7 @@ console.log("viewContact",viewContact);
    
 
 
-<DashboardLayout title={title}>
+<DashboardLayout title={title} pageId={id}>
 <div className="view-page">
                 <div className="header-row d-flex justify-content-between align-items-center">
                   <h4>CONTACT INFORMATION</h4>

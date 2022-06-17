@@ -15,10 +15,12 @@ import { HiOutlineUser } from "react-icons/hi";
 import { IconContext } from "react-icons";
 import { MdOutlineGroups } from "react-icons/md";
 import DashboardLayout from "../Common/DashboardLayout";
+import labelClose from "../assets/images/label-close.png";
 
 const AddContact = () => {
   const navigate = useNavigate();
-  const titleHeader = "Manage contact";
+  const title = "Manage Contact";
+  const id = 2;
   const [nameError, setNameError] = useState("");
   const [numError, setNumError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -40,30 +42,38 @@ const AddContact = () => {
     website: "",
     facebook: "",
     instagram: "",
-    linkedIn: ""
+    linkedIn: "",
   });
   const handleChange = (e) => {
     setContact({ ...contact, [e.target.name]: e.target.value });
   };
 
   // Add label
-  const [newLabel, setNewLabel] = useState([ { label: "Secondary Phone Number" } ]);
+  const [newLabel, setNewLabel] = useState([
+    { label: "Secondary Phone Number" },
+  ]);
   const [labelChange, SetLabelChange] = useState({ label: "" });
-
+  const [newLabelset, setnewLabelSet] = useState([{ label: "", values: "" }]);
+  const[submitnewValueSet,setsubmitNewValueSet]=useState([{ label: "", values: "" }])
+  // popup label input
   const labelChangeHandler = (e) => {
-    SetLabelChange({ label: e.target.value });
+    SetLabelChange({ ...labelChange, label: e.target.value });
   };
   const handleSubmitLabel = () => {
     setNewLabel([...newLabel, labelChange]);
-    console.log("new labaleee", newLabel);
+  };
+  // page input(newly added input)
+  const handleNewValueChange = (e) => {
+    setnewLabelSet([ ...newLabelset,{ label: e.target.name, values: e.target.value }]);
   };
 
+  // remove label
   const removeLabel = (removeId) => {
     const sampleLabels = [...newLabel];
     sampleLabels.splice(removeId, 1);
     setNewLabel(sampleLabels);
   };
- 
+
   // post values
   const addContact = (e) => {
     e.preventDefault();
@@ -74,8 +84,10 @@ const AddContact = () => {
     const numberValidate = mobileNumvalidator(contact.number);
     const emailValidate = emailValidator(contact.mailId);
 
-  //  contact.push(addedValues);
-  //   console.log(("addedValuessarraty",addedValues));
+    console.log("existing", contact);
+    console.log("new value set", newLabelset);
+
+console.log("submit new values",submitnewValueSet);
     if (contact.name !== "" && numberValidate && emailValidate) {
       const postData = async () => {
         await axios.post(" http://localhost:8001/contactDetails", contact);
@@ -127,11 +139,9 @@ const AddContact = () => {
     );
   };
 
-  
-
   return (
     <>
-      <DashboardLayout title={titleHeader}>
+      <DashboardLayout title={title} pageId={id}>
         <div className="add-page">
           <h4 className="text-white">Contact Form</h4>
           <div className="add-page-content ">
@@ -336,14 +346,14 @@ const AddContact = () => {
                   {newLabel.map((e, index) => {
                     return (
                       <div key={index} className="col-lg-4">
-                        <div className="input-sec">
+                        <div className="input-sec new-input-sec">
                           <label>{e.label}</label>
                           <div className="input-wrapper">
                             <input
                               className="form-control"
                               placeholder={"Enter " + e.label}
                               name={e.label}
-                              onChange={handleChange}
+                              onChange={handleNewValueChange}
                             />
                             <div
                               className="input-logo"
@@ -351,7 +361,7 @@ const AddContact = () => {
                                 removeLabel(index);
                               }}
                             >
-                              <GrLinkedinOption />
+                              <img src={labelClose} alt="close" />
                             </div>
                           </div>
                         </div>

@@ -23,6 +23,7 @@ const ChartData = () => {
                 // return  (e.location)
                 // });
                 // label.push(labelArray);
+                
 
 
 
@@ -36,12 +37,16 @@ const ChartData = () => {
                     // console.log("data",data);
                 }
                 // console.log(resp.data);
+                newArray=[];
+                var newArray = label.filter((e,index)=> {
+                  return label.indexOf(e) == index;
+                });
                 setChartValues({
                   datasets: [{
                             data:data,
                             backgroundColor:[ "#CA9C31",'#854095','#E37E06','#1170CB','#D9B648']
                         }], 
-                  labels:label,
+                  labels:newArray,
                 
                 })
              }).catch(error=>console.log("error",error))

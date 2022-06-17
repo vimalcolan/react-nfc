@@ -13,17 +13,14 @@ import DashboardLayout from "../Common/DashboardLayout";
 const EditContact = () => {
   const navigate=useNavigate();
   const title = "Manage contact";
-  const [togglemenu, setTogglemenu] = useState(false);
+  const id=2;
    // Authentication
    useEffect(()=>{
-    if(sessionStorage.getItem("auth")){
-      navigate("/edit-contact")
+    if(sessionStorage.getItem("auth")===null){
+      navigate("/login")
     }
-      else{
-          navigate("/login")
-      }
-    
   },[])
+
   const[editData,setEditdata]=useState( {name: "",
   title: "",
   number: "",
@@ -33,6 +30,8 @@ const EditContact = () => {
   facebook: "",
   instagram: "",
   linkedIn: ""})
+  // const[editNewData,seteditNewData]=useState([{label:"",value:""}]);
+
   // get edit id from session storage
   const updateId=sessionStorage.getItem("editId");
  useEffect(()=>{
@@ -40,11 +39,17 @@ const EditContact = () => {
     axios.get(`http://localhost:8001/contactDetails/${updateId}`).then(res=>setEditdata(res.data));
       }
       fetchData(); 
+    
  },[]);
+
+//  const newLabel=editData.newlabels
+//  seteditNewData([{...editNewData,newLabel}]);
+// console.log("newlabels",editData.newlabels);
+
+
   const handleChange = (e) => {
     setEditdata({ ...editData, [e.target.name]: e.target.value });
   };
- 
 
   const EditContact = (e) => {
     e.preventDefault();
@@ -62,10 +67,49 @@ const EditContact = () => {
   
   };
 
+
+   // image upload
+   const [imgUpload, setImgUpload] = useState(
+    "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
+  );
+
+  const imgHandler = (e) => {
+    const file = new FileReader();
+    file.onload = () => {
+      if (file.readyState === 2) {
+        setImgUpload(file.result);
+      }
+    };
+    file.readAsDataURL(e.target.files[0]);
+  };
+  // remove image
+  const removeLogo = () => {
+    setImgUpload(
+      "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
+    );
+  };
+
+
+  // const user={
+  //   name: "project1.3345",
+  //   title: "jobtitle3",
+  //   number: " 9876554433",
+  //   mailId: "test7@gmail.com",
+  //   organisation: "test oorganisation",
+  // website: "www.test.com",
+  // facebook: "test33",
+  //   instagram: "sample_223",
+  //   linkedIn: "sample_test3",
+  //   id: 3,
+  //   newlabels:[{label:"sec",value:"9876543210"},{label:"twitter",value:"vimal11"},{label:"num3",value:"0000"}]
+  // }
+  // const newLabel=user.newlabels
+  
+  // console.log("new",newLabel);
   return (
     <>
  
-<DashboardLayout title={title}>
+<DashboardLayout  title={title} pageId={id}>
 <div className="edit-page">
           <h4 className="text-white">Contact Form</h4>
             <div className="add-page-content ">
@@ -74,12 +118,29 @@ const EditContact = () => {
                 <button className="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Field</button>
               </div>
               <div className="input-logo-sec">
-                <div className="input-logo-wrapper">
-                 <div className="img-wrapper"> <img src={logoImg} alt="logo" /></div>
-                  <span className="change-logo">Change LOGO</span>
-                  <span className="remove-logo">Remove Photo</span>
+              <div className="input-logo-wrapper d-flex align-items-center">
+                <div className="img-wrapper me-2">
+                  {" "}
+                  <img src={imgUpload} alt="logo" />
                 </div>
+                <div className="logo-change">
+                  <input
+                    type="file"
+                    id="input"
+                    className="img-upload"
+                    accept="image/*"
+                    onChange={imgHandler}
+                  />
+                  <label htmlFor="input">
+                    {" "}
+                    <span className="change-logo">CHANGE LOGO</span>
+                  </label>
+                </div>
+                <span className="remove-logo text-white" onClick={removeLogo}>
+                  REMOVE PHOTO
+                </span>
               </div>
+            </div>
               <div className="basic-info-head">
                 <h5>Basic Information</h5>
               </div>
@@ -224,6 +285,29 @@ const EditContact = () => {
                     </div>
                    </div>
                 </div>
+                {/* {
+                 newLabel.length?( 
+                  newLabel.map((e,ind)=>{
+                  return(
+                   <div className="col-lg-4" key={ind}>
+                   <div className="input-sec">
+                        <label>{e.label}</label>
+                       <div className="input-wrapper">
+                         <div className="input-logo"><img src={userIcon} alt="icon"/></div>
+                       <input
+                         className="form-control"
+                         placeholder="name"
+                         name={e.name}
+                         onChange={handleChange}
+                         value={e.value}
+                       />
+                       </div>
+                      </div>
+                   </div>
+                  )
+                 })
+                 ):(<div>no new labels</div>)
+                } */}
                
                 <div className="col-lg-12 ">
                  <div className="buttons d-flex justify-content-center">

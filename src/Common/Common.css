@@ -24,15 +24,6 @@ img,svg{
     position: relative;
     border-right: 2px solid #D04F2A;
 }
-/* .notifications::before{
-    position: absolute;
-    width: 2px;
-    height: 20px;
-    background: #D04F2A;
-border-radius: 0.5px;
-left: 20px;
-display: block;
-} */
 .profile-wrapper{
     margin-left: 30px;
 }
@@ -159,3 +150,79 @@ margin-left: 20px;
     left: 280px;
     margin: 0 !important;
 }
+
+
+
+/* loader */
+
+@keyframes hexagon {
+    0% { transform:rotate(0deg); }
+     25% { transform:rotate(180deg); }
+    50% { transform:rotate(360deg); }
+     75% { transform:rotate(180deg); }
+    100% { transform:rotate(0deg); }
+  }
+  .loader{
+    background: #0e0e0e;
+    overflow-y: hidden;
+    width: 100%;
+    height: 100vh;
+  }
+  
+  .loading-hexagon, .loading-hexagon:before, .loading-hexagon:after {
+    display: block;
+    position: absolute;
+    width: 88px;
+    height: 154px;
+    /* border: 1px solid transparent; */
+    padding: 0;
+    background: #fff;
+    border-top: 3px solid #fff;
+    border-bottom: 3px solid #fff;
+    border-radius: 5px;
+  }
+  
+  .loading-hexagon {
+            animation: hexagon 4s ease-in-out infinite;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+  }
+  
+  .loading-hexagon:before {
+    margin: -1px 0 0 -1px;
+    width: 88px;
+    height: 154px;
+    content: '';
+            transform: rotate(-60deg);
+  }
+  
+  .loading-hexagon:after {
+    margin: -1px 0 0 -1px;
+    width: 88px;
+    height: 154px;
+    content: '';
+            transform: rotate(60deg);
+  }
+  
+  .inner.loading-hexagon {
+    z-index: 100;
+    width: 74px;
+    height: 129px;
+  }
+  
+  .inner.loading-hexagon:before {
+    width: 74px;
+    height: 129px;
+  }
+  
+  .inner.loading-hexagon:after {
+    width: 74px;
+    height: 129px;
+  }
+  
+  .inner.loading-hexagon, .inner.loading-hexagon:before, .inner.loading-hexagon:after {
+    background: #000;
+  }

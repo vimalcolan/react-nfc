@@ -1,9 +1,9 @@
 import React, {useState, useEffect } from "react";
 import ChartData from "../Shared/ChartData";
 import search from '../assets/images/search-icon.png';
-import "./Common.css";
+import "../Common/Common.css";
 import { useNavigate } from "react-router-dom";
-import DashboardLayout from "./DashboardLayout";
+import DashboardLayout from "../Common/DashboardLayout";
 import axios from "axios";
 import countArrow from "../assets/images/count-arrows.svg"
 
@@ -17,6 +17,7 @@ const id=1;
       navigate("/login")
     }    
   },[]);
+ 
   // table values
   const[savedData,setSavedData]=useState([{id:"",name:"",saved:""}]);
 useEffect(()=>{
@@ -77,6 +78,11 @@ let postIncrementBtn=null;
 
   return (
     <>
+   
+   {/* <div className="loader">
+    <div class="loading-hexagon"></div>
+<div class="loading-hexagon inner"></div>
+    </div> */}
     <DashboardLayout title={title} pageId={id}>
           <div className="overview">
               <h4>Overview</h4>
