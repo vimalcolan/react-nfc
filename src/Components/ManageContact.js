@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,6 +36,9 @@ const ManageContact = () => {
     };
     fetchData();
   }, []);
+  // console.log("normal",contactDetails);
+  // var reversedContact=contactDetails.reverse();
+  // console.log("rev",reversedContact);
 
   //   filter
   const [searchName, setsearchName] = useState("");
@@ -65,7 +68,7 @@ const ManageContact = () => {
         return e.id;
       });
     sessionStorage.setItem("editId", index);
-    navigate("/edit-contact");
+    navigate(`/contacts/edit/${index}`);
   };
 
   //------------------------------- delete contact -------------------------------//
@@ -85,15 +88,9 @@ const ManageContact = () => {
   // -------------------------------------- View contact ------------------------//
   const handleView = (viewId) => {
     console.log("view id", viewId);
-    const index = contactDetails
-      .filter((e) => {
-        return e.id === viewId;
-      })
-      .map((e) => {
-        return e.id;
-      });
+    const index = contactDetails.filter((e) => {return e.id === viewId;}).map((e) => { return e.id;});
     sessionStorage.setItem("viewId", index);
-    navigate("/view-contact");
+    navigate(`/contacts/view/${index}`);
   };
 
   // -----------------------------------------pagination---------------------------------------------------------
@@ -179,6 +176,8 @@ const ManageContact = () => {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const json = xlsx.utils.sheet_to_json(worksheet);
+        console.log("upload",json);
+       
         for (var key in json) {
           axios.post(" http://localhost:8001/contactDetails", json[key]);
         }
@@ -260,7 +259,8 @@ const ManageContact = () => {
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>name</th>
+                    <th>Name</th>
+                    <th>Details</th>
                     <th>Job title</th>
                     <th>Mobile Number</th>
                     <th>Email id</th>
@@ -298,12 +298,16 @@ const ManageContact = () => {
                       .map((e, index) => (
                         <tr key={e.id}>
                           <td>{e.id}</td>
-                          <td><span className="name-text" onClick={() => { navigate("/"); }}> {e.name}</span></td>
+                          <td><Link to="/"><span className="name-text"> {e.name}</span></Link></td>
+                          <td><span className="name-text">Link</span></td>
                           <td>{e.title}</td>
                           <td>{e.number}</td>
                           <td>{e.mailId}</td>
                           <td>
-                            <span  onClick={() => {handleView(e.id);}} > <img src={view} alt="view" /></span>
+                            {/* <Link to="/contacts/view/">
+                              <span><img src={view} alt="view" /></span>
+                            </Link> */}
+                            <span  onClick={() => {handleView(e.id)}} > <img src={view} alt="view" /></span>
                             <span className="mx-2"  onClick={() => {handleEdit(e.id); }}><img src={edit} alt="edit" /></span>
                             <span onClick={() => { handleDelete(e.id); }}> <img src={deleteIcon} alt="delete" /> </span>
                           </td>

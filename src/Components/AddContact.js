@@ -43,29 +43,37 @@ const AddContact = () => {
     facebook: "",
     instagram: "",
     linkedIn: "",
+    newLabels:[],
+    imgURL:[]
   });
   const handleChange = (e) => {
     setContact({ ...contact, [e.target.name]: e.target.value });
   };
 
-  // Add label
-  const [newLabel, setNewLabel] = useState([
-    { label: "Secondary Phone Number" },
-  ]);
-  const [labelChange, SetLabelChange] = useState({ label: "" });
-  const [newLabelset, setnewLabelSet] = useState([{ label: "", values: "" }]);
-  const[submitnewValueSet,setsubmitNewValueSet]=useState([{ label: "", values: "" }])
+
+  //----------------- Add label --------------------//
+
+  // get labels
+  const [newLabel, setNewLabel] = useState([]);
+  const [labelChange, SetLabelChange] = useState("");
+  const[newValue,setnewValue]=useState([{label:"",value:""}]);
+
   // popup label input
   const labelChangeHandler = (e) => {
-    SetLabelChange({ ...labelChange, label: e.target.value });
+    SetLabelChange(e.target.value);
   };
+
   const handleSubmitLabel = () => {
     setNewLabel([...newLabel, labelChange]);
+    setnewValue([...newValue,{label:"",value:""}]);
   };
-  // page input(newly added input)
-  const handleNewValueChange = (e) => {
-    setnewLabelSet([ ...newLabelset,{ label: e.target.name, values: e.target.value }]);
-  };
+  // page input(newly added input change)
+  const handleNewValueChange = (e,k) => {
+   let element=[...newValue];
+   element[k].label=newLabel[k];
+   element[k].value=e.target.value;
+   setnewValue(element);
+  }
 
   // remove label
   const removeLabel = (removeId) => {
@@ -74,7 +82,30 @@ const AddContact = () => {
     setNewLabel(sampleLabels);
   };
 
-  // post values
+   //------------------------- image upload----------------------//
+
+   const [imgUpload, setImgUpload] = useState(
+    "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
+  );
+
+  const imgHandler = (e) => {
+    const file = new FileReader();
+    file.onload = () => {
+      if (file.readyState === 2) {
+        setImgUpload(file.result);
+      }
+    };
+    file.readAsDataURL(e.target.files[0]);
+  };
+
+  // remove image
+  const removeLogo = () => {
+    setImgUpload(
+      "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
+    );
+  };
+
+  //---------------------- post values -----------------------//
   const addContact = (e) => {
     e.preventDefault();
     setNameError("");
@@ -83,18 +114,25 @@ const AddContact = () => {
 
     const numberValidate = mobileNumvalidator(contact.number);
     const emailValidate = emailValidator(contact.mailId);
-
-    console.log("existing", contact);
-    console.log("new value set", newLabelset);
-
-console.log("submit new values",submitnewValueSet);
+    
+newValue.pop();
+newValue.map((e)=>{
+  console.log("new value set",e);
+    if((newValue.label!=="")&&(newValue.value!=="")){
+    contact.newLabels.push(e)
+    }
+});
+contact.imgURL.push(imgUpload)
+   
+  
     if (contact.name !== "" && numberValidate && emailValidate) {
       const postData = async () => {
         await axios.post(" http://localhost:8001/contactDetails", contact);
       };
       postData();
       navigate("/manage-contact");
-    } else {
+    } 
+    else {
       if (contact.name == "") {
         setNameError("please Enter name");
       }
@@ -116,28 +154,10 @@ console.log("submit new values",submitnewValueSet);
         });
       }
     }
+
   };
 
-  // image upload
-  const [imgUpload, setImgUpload] = useState(
-    "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
-  );
-
-  const imgHandler = (e) => {
-    const file = new FileReader();
-    file.onload = () => {
-      if (file.readyState === 2) {
-        setImgUpload(file.result);
-      }
-    };
-    file.readAsDataURL(e.target.files[0]);
-  };
-  // remove image
-  const removeLogo = () => {
-    setImgUpload(
-      "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
-    );
-  };
+ 
 
   return (
     <>
@@ -183,7 +203,7 @@ console.log("submit new values",submitnewValueSet);
               <h5>Basic Information</h5>
             </div>
             <IconContext.Provider value={{ size: "20px", color: "#858585" }}>
-              <form onSubmit={addContact} className="add-form">
+              <form className="add-form">
                 <div className="row">
                   <div className="col-lg-4">
                     <div className="input-sec">
@@ -343,17 +363,18 @@ console.log("submit new values",submitnewValueSet);
                       </div>
                     </div>
                   </div>
-                  {newLabel.map((e, index) => {
+                  {newLabel.map((event, index) => {
                     return (
                       <div key={index} className="col-lg-4">
                         <div className="input-sec new-input-sec">
-                          <label>{e.label}</label>
+                          <label>{event}</label>
                           <div className="input-wrapper">
                             <input
                               className="form-control"
-                              placeholder={"Enter " + e.label}
-                              name={e.label}
-                              onChange={handleNewValueChange}
+                              placeholder={"Enter " + event}
+                              name={event}
+                              value={newValue[index].value}
+                              onChange={(e)=>{handleNewValueChange(e,index)}}
                             />
                             <div
                               className="input-logo"
@@ -369,31 +390,12 @@ console.log("submit new values",submitnewValueSet);
                     );
                   })}
 
-                  {
-                    // ( newLabel.map((e)=>{
-                    //   return (
-                    //     <div className="col-lg-4">
-                    //     <div className="input-sec">
-                    //          <label>{e.new}</label>
-                    //         <div className="input-wrapper">
-                    //           <div className="input-logo"><GrLinkedinOption/></div>
-                    //         <input
-                    //           className="form-control"
-                    //           placeholder={"Enter" + e.new}
-                    //           name={e.new}
-                    //           onChange={handleChange}
-                    //         />
-                    //         </div>
-                    //        </div>
-                    //     </div>
-                    //   )
-                    // }))
-                  }
+                
                 </div>
                 <div className="row">
                   <div className="col-lg-12 ">
                     <div className="buttons d-flex justify-content-center">
-                      <button className="btn update m-2" type="submit">
+                      <button className="btn update m-2" type="button" onClick={addContact}>
                         Update
                       </button>
                       <button className="btn cancel m-2">cancel</button>
@@ -426,7 +428,9 @@ console.log("submit new values",submitnewValueSet);
               <h5>
                 <label>Label Name</label>
               </h5>
-              <input type="text" onChange={labelChangeHandler} />
+              <input type="text" onChange={
+                labelChangeHandler
+              } />
             </div>
             <div className="modal-footer d-flex justify-content-between">
               <button

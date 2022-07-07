@@ -4,7 +4,6 @@ import axios from "axios"
 import "../Common/Common.css"
 import back from '../assets/images/back.png'
 import name from '../assets/images/name.png'
-import title from '../assets/images/title.png'
 import number from '../assets/images/number.png'
 import mailId from '../assets/images/mailId.png'
 import organisation from '../assets/images/organisation.png'
@@ -14,6 +13,7 @@ import insta from '../assets/images/insta.png'
 import linkedIn from '../assets/images/linkedIn.png'
 import customFields from '../assets/images/customFields.png'
 import address from '../assets/images/address.png'
+import jobTitle from '../assets/images/jobTitle.png'
 import DashboardLayout from "../Common/DashboardLayout"
 
 const ViewContact = () => {
@@ -28,23 +28,38 @@ const ViewContact = () => {
     } 
   },[]);
   
-  const[viewContact,setviewContact]=useState({})
+  const[viewContact,setviewContact]=useState({});
+  const[newLabelPrev,setnewLabelPrev]=useState([]);
   const ViewContactId=sessionStorage.getItem("viewId");
   useEffect(()=>{
     const fetchData=async()=>{
-      await axios.get(`http://localhost:8001/contactDetails/${ViewContactId}`).then(res=>setviewContact(res.data))
+      await axios.get(`http://localhost:8001/contactDetails/${ViewContactId}`).then(res=>{
+        setviewContact(res.data)
+        setnewLabelPrev(res.data.newLabels);
+      })
     }
     fetchData();
+ 
+  
   },[])
-console.log("viewContact",viewContact);
+console.log("contact",viewContact);
+// debugger;
+
+// const newlab=viewContact.newLabels.map((e)=>{return (e)});
+  // setviewContactnewLabels([...viewContactnewLabels,viewContact.newLabels]);
+console.log("newwe",newLabelPrev);
+ 
+
+ 
+ 
+  // viewContactnewLabels=viewContact.newLabels
+  // console.log("viewContact newlabel updated",viewContactnewLabels);
+
 
   return (
     <>
-   
-
-
-<DashboardLayout title={title} pageId={id}>
-<div className="view-page">
+          <DashboardLayout title={title} pageId={id}>
+             <div className="view-page">
                 <div className="header-row d-flex justify-content-between align-items-center">
                   <h4>CONTACT INFORMATION</h4>
                   <div className="back-btn">
@@ -61,7 +76,7 @@ console.log("viewContact",viewContact);
                   </div>
                   <div className="col-lg-4">
                     <div className="card">
-                      <div className="icon"><img src={title} alt="back"  /></div>
+                      <div className="icon"><img src={jobTitle} alt="back"  /></div>
                       <div className="label-name">Job Title</div>
                       <div className="label-value">{viewContact.title}</div>
                     </div>
@@ -129,7 +144,22 @@ console.log("viewContact",viewContact);
                       <div className="label-value"></div>
                     </div>
                   </div>
-
+                  {
+                    newLabelPrev.map((e,i)=>{
+                      return(
+                       <>
+                        <div className="col-lg-4" key={i}>
+                        <div className="card">
+                          <div className="icon"><img src={address} alt="back"  /></div>
+                          <div className="label-name">{e.label}</div>
+                          <div className="label-value">{e.value}</div>
+                        </div>
+                      </div>
+                       </>
+    
+                      )
+                    })
+                  }
                 </div>
             </div>
 </DashboardLayout>

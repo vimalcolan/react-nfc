@@ -28,8 +28,13 @@ const RoutesFile = () => {
         <Route  path='/manage-contact' element={<ManageContact/>}/>
         <Route path='/add-contact' element={<AddContact/>} />
         <Route path='/reports' element={<Reports/>} />
-        <Route path='/view-contact' element={<ViewContact/>} />
-        <Route path='/edit-contact' element={<EditContact/>} />
+        <Route path='/contacts' >
+          <Route path="view/:id" element={<ViewContact/>}/>
+        </Route>
+        <Route path='/contacts' >
+          <Route path="edit/:id" element={<EditContact/>} />
+        </Route>
+        {/* <Route path='/edit-contact' element={<EditContact/>} /> */}
       </Routes>
       </BrowserRouter>
     </>

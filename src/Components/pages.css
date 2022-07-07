@@ -1,3 +1,9 @@
+img,svg{
+cursor: pointer;
+}
+a{
+  text-decoration: none;
+}
 /* ------------------------------------------------Manage page--------------------------------------------- */
 .manage-page .sample-doc{
     font-weight: 500;
@@ -416,6 +422,7 @@ padding: 12px 15px;
     background: #1E1F22;
     padding: 20px;
     margin: 20px 0;
+    min-height: 130px;
 
   }
   .view-page .card .label-name{
@@ -477,4 +484,7 @@ color: #FFFFFF;
  }
  .reports-page .table tbody tr:last-child td{
    border: 0;
+ }
+ .dashboard-top-row .card{
+  flex-direction: row;
  }

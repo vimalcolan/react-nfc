@@ -76,6 +76,14 @@ let postIncrementBtn=null;
    postIncrementBtn= <li onClick={handleNextBtn}>...</li>
   }
 
+// number of taps and saves
+
+  const saved=(savedData.map((e)=>{return Number(e.saved)}).reduce((acc,curr)=>acc+curr,0))
+  const taped=(savedData.map((e)=>{return Number(e.taps)}).reduce((acc,curr)=>acc+curr,0))
+
+
+
+
   return (
     <>
    
@@ -86,6 +94,22 @@ let postIncrementBtn=null;
     <DashboardLayout title={title} pageId={id}>
           <div className="overview">
               <h4>Overview</h4>
+            </div>
+            <div className="row dashboard-top-row mb-2">
+              <div className="col-6">
+                <div className="card d-flex justify-content-between bg-dark text-white">
+                  <h4>Number of saves</h4>
+                  <div>{saved}</div>
+                </div>
+
+              </div>
+              <div className="col-6">
+              <div className="card  d-flex justify-content-between bg-dark text-white">
+                  <h4>Number of taps</h4>
+                  <div>{taped}</div>
+                </div>
+
+              </div>
             </div>
             <div className="row main-row">
               <div className="col-md-6">

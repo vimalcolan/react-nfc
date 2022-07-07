@@ -9,11 +9,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import logoImg from "../assets/images/logoImg.png";
 import userIcon from "../assets/images/userIcon.png";
 import DashboardLayout from "../Common/DashboardLayout";
+import labelClose from "../assets/images/label-close.png";
+import profileLogo from "../assets/images/profile-icon.png";
 
 const EditContact = () => {
   const navigate=useNavigate();
   const title = "Manage contact";
   const id=2;
+
    // Authentication
    useEffect(()=>{
     if(sessionStorage.getItem("auth")===null){
@@ -29,88 +32,144 @@ const EditContact = () => {
   website: "",
   facebook: "",
   instagram: "",
-  linkedIn: ""})
-  // const[editNewData,seteditNewData]=useState([{label:"",value:""}]);
+  linkedIn: "",
+  newLabels:[],
+  imgURL:[]
+});
 
+const[existingEditLabel,setexistingEditLabel]=useState([]);
+const [newEditLabel, setnewEditLabel] = useState([{label:"",value:""}]);
+const [labelChange, SetLabelChange] = useState("");
+const[addLabels,setaddLabels]=useState([]);
+const[newValue,setnewValue]=useState([{label:"",value:""}]);
+const[newValue1,setnewValue1]=useState([{label:"",value:""}]);
+const [imgUpload, setImgUpload] = useState("https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg")
+const[editImgUpload,seteditImgUpload]=useState("");
   // get edit id from session storage
   const updateId=sessionStorage.getItem("editId");
+
  useEffect(()=>{
   const fetchData=async ()=>{
-    axios.get(`http://localhost:8001/contactDetails/${updateId}`).then(res=>setEditdata(res.data));
+    axios.get(`http://localhost:8001/contactDetails/${updateId}`).then(res=>{
+      setEditdata(res.data);
+      setexistingEditLabel(res.data.newLabels);
+      setImgUpload(res.data.imgURL)});
       }
       fetchData(); 
-    
  },[]);
-
-//  const newLabel=editData.newlabels
-//  seteditNewData([{...editNewData,newLabel}]);
-// console.log("newlabels",editData.newlabels);
-
-
+//  console.log("initial edit data",editData);
   const handleChange = (e) => {
     setEditdata({ ...editData, [e.target.name]: e.target.value });
   };
 
+const labelChangeHandler = (e) => {
+  SetLabelChange(e.target.value);
+};
+
+const handleSubmitLabel = () => {
+  setaddLabels([...addLabels,labelChange])
+  setnewValue1([...newValue1,{label:"",value:""}]);
+
+};
+const handleNewValueChange = (e,k) => {
+  let element=[...existingEditLabel];
+  element[k].label=existingEditLabel[k].label;
+  element[k].value=e.target.value;
+  setnewValue(element);
+  console.log("element",element);
+
+}
+const handleNewValueChange1 = (e,k) => {
+  let element=[...newValue1];
+  element[k].label=addLabels[k];
+  element[k].value=e.target.value;
+  setnewValue1(element);
+  console.log("element",element);
+}
+
+const removeLabel=(e)=>{
+  const sampleLabels=[...existingEditLabel];
+  sampleLabels.splice(e,1);
+  setexistingEditLabel(sampleLabels);
+}
+const removeLabel1=(evt)=>{
+  const sampleLabels=[...addLabels];
+  sampleLabels.splice(evt,1);
+  setaddLabels(sampleLabels);
+}
+
+ // image upload
+ const imgHandler = (e) => {
+  if((editData.imgURL).length!==0){
+    const file = new FileReader();
+    file.onload = () => {
+    if (file.readyState === 2) {
+      setImgUpload(file.result);
+      seteditImgUpload(file.result);
+    }
+  };
+  file.readAsDataURL(e.target.files[0]);
+  }
+  // editData.imgURL.pop()
+};
+
+
+// remove image
+const removeLogo = () => {
+  setImgUpload(
+    "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
+  );
+};
+
+
+// -----------------------Edit Values --------------------------//
   const EditContact = (e) => {
     e.preventDefault();
+
+
+    const editUpdated=[...existingEditLabel];
+//     console.log("existing edited data",editUpdated);
+// const apieditedLabels=[...editData.newLabels];
+// console.log("api edit data",apieditedLabels);
+// apieditedLabels.splice(0);
+// console.log("all deleted from api",apieditedLabels);
+editData.newLabels.splice(0);
+editUpdated.map((e)=>{
+  editData.newLabels.push(e);
+})
+
+
+newValue1.pop();
+  newValue1.map((e)=>{
+    console.log("new value set",e);
+      if((newValue1.label!=="")&&(newValue1.value!=="")){
+      editData.newLabels.push(e)
+      }
+  });
+      // update image
+   
+setImgUpload(editImgUpload);
+// editData.imgURL.push(imgUpload);
+
+
+
     if((editData.name!=="")&&(editData.number!=="")){
+      console.log("final edit data",editData);
       const postData = async () => {
         await axios
           .put(`http://localhost:8001/contactDetails/${updateId}`, editData)
-          .then((data) => console.log(data.data));
+          .then((data) => console.log(data.data)).catch(err=>console.log(err))
       };
-      postData();
+      postData(); 
       toast.success("Contact updated successfully",{position:toast.POSITION.TOP_RIGHT});
       navigate('/manage-contact');
       sessionStorage.removeItem("editId");
-    }
-  
-  };
+    }}
 
-
-   // image upload
-   const [imgUpload, setImgUpload] = useState(
-    "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
-  );
-
-  const imgHandler = (e) => {
-    const file = new FileReader();
-    file.onload = () => {
-      if (file.readyState === 2) {
-        setImgUpload(file.result);
-      }
-    };
-    file.readAsDataURL(e.target.files[0]);
-  };
-  // remove image
-  const removeLogo = () => {
-    setImgUpload(
-      "https://cdn2.vectorstock.com/i/1000x1000/35/71/profile-icon-with-add-sign-vector-20383571.jpg"
-    );
-  };
-
-
-  // const user={
-  //   name: "project1.3345",
-  //   title: "jobtitle3",
-  //   number: " 9876554433",
-  //   mailId: "test7@gmail.com",
-  //   organisation: "test oorganisation",
-  // website: "www.test.com",
-  // facebook: "test33",
-  //   instagram: "sample_223",
-  //   linkedIn: "sample_test3",
-  //   id: 3,
-  //   newlabels:[{label:"sec",value:"9876543210"},{label:"twitter",value:"vimal11"},{label:"num3",value:"0000"}]
-  // }
-  // const newLabel=user.newlabels
-  
-  // console.log("new",newLabel);
-  return (
+return (
     <>
- 
-<DashboardLayout  title={title} pageId={id}>
-<div className="edit-page">
+      <DashboardLayout  title={title} pageId={id}>
+        <div className="edit-page">
           <h4 className="text-white">Contact Form</h4>
             <div className="add-page-content ">
               <div className="header-row d-flex justify-content-between align-items-center">
@@ -119,26 +178,12 @@ const EditContact = () => {
               </div>
               <div className="input-logo-sec">
               <div className="input-logo-wrapper d-flex align-items-center">
-                <div className="img-wrapper me-2">
-                  {" "}
-                  <img src={imgUpload} alt="logo" />
-                </div>
+                <div className="img-wrapper me-2"> {" "}<img src={imgUpload} alt="logo" /></div>
                 <div className="logo-change">
-                  <input
-                    type="file"
-                    id="input"
-                    className="img-upload"
-                    accept="image/*"
-                    onChange={imgHandler}
-                  />
-                  <label htmlFor="input">
-                    {" "}
-                    <span className="change-logo">CHANGE LOGO</span>
-                  </label>
+                  <input type="file" id="input" className="img-upload" accept="image/*" onChange={imgHandler}/>
+                  <label htmlFor="input">{" "}<span className="change-logo">CHANGE LOGO</span></label>
                 </div>
-                <span className="remove-logo text-white" onClick={removeLogo}>
-                  REMOVE PHOTO
-                </span>
+                <span className="remove-logo text-white" onClick={removeLogo}>REMOVE PHOTO</span>
               </div>
             </div>
               <div className="basic-info-head">
@@ -147,18 +192,11 @@ const EditContact = () => {
               <form onSubmit={EditContact} className="add-form">
               <div className="row">
                 <div className="col-lg-4">
-                 
                    <div className="input-sec">
                      <label>Name</label>
                     <div className="input-wrapper">
                       <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                    <input
-                     
-                      placeholder="name"
-                      name="name"
-                      onChange={handleChange}
-                      value={editData.name}
-                    />
+                    <input placeholder="name"  name="name"  onChange={handleChange} value={editData.name}/>
                     </div>
                    </div>
                   </div>
@@ -285,29 +323,67 @@ const EditContact = () => {
                     </div>
                    </div>
                 </div>
-                {/* {
-                 newLabel.length?( 
-                  newLabel.map((e,ind)=>{
-                  return(
-                   <div className="col-lg-4" key={ind}>
-                   <div className="input-sec">
-                        <label>{e.label}</label>
-                       <div className="input-wrapper">
-                         <div className="input-logo"><img src={userIcon} alt="icon"/></div>
-                       <input
-                         className="form-control"
-                         placeholder="name"
-                         name={e.name}
-                         onChange={handleChange}
-                         value={e.value}
-                       />
-                       </div>
+                  {
+             existingEditLabel.length?(
+                existingEditLabel.map((event, index) => {
+                    return (
+                      <div key={index} className="col-lg-4">
+                        <div className="input-sec new-input-sec">
+                          <label>{event.label}</label>
+                          <div className="input-wrapper">
+                            <input
+                              className="form-control"
+                              placeholder={"Enter " + event.label}
+                              name={event.label}
+                              value={existingEditLabel[index].value}
+                              onChange={(e)=>{handleNewValueChange(e,index)}}
+                            />
+                            <div
+                              className="input-logo"
+                              onClick={() => {
+                                removeLabel(index);
+                              }}
+                            >
+                              <img src={labelClose} alt="close" />
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                   </div>
-                  )
-                 })
-                 ):(<div>no new labels</div>)
-                } */}
+                    );
+                  })
+                 ):(null)
+                  }
+
+
+                {addLabels.length?(
+               addLabels.map((event, index) => {
+                    return (
+                      <div key={index} className="col-lg-4">
+                        <div className="input-sec new-input-sec">
+                          <label>{event}</label>
+                          <div className="input-wrapper">
+                            <input
+                              className="form-control"
+                              placeholder={"Enter " + event}
+                              name={event}
+                              value={newValue1[index].value}
+                              onChange={(e)=>{handleNewValueChange1(e,index)}}
+                            />
+                            <div
+                              className="input-logo"
+                              onClick={() => {
+                                removeLabel1(index);
+                              }}
+                            >
+                              <img src={labelClose} alt="close" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                 ):(null)
+                  }
                
                 <div className="col-lg-12 ">
                  <div className="buttons d-flex justify-content-center">
@@ -326,6 +402,53 @@ const EditContact = () => {
             </div>
           </div>
 </DashboardLayout>
+
+
+{/* ---------------MODAL---------------- */}
+
+
+<div className="modal fade" id="exampleModal">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Add label
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body">
+              <h5>
+                <label>Label Name</label>
+              </h5>
+              <input type="text" onChange={
+                labelChangeHandler
+              } />
+            </div>
+            <div className="modal-footer d-flex justify-content-between">
+              <button
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onClick={handleSubmitLabel}
+              >
+                save
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

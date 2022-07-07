@@ -165,9 +165,9 @@ const Login = () => {
                       )}
                     </div>
                     <div className="d-flex justify-content-between">
-                      <div className="remember-me d-flex align-items-center justify-content-center">
-                        <input type="checkbox" autoComplete="off"/>
-                        <label className="ms-1">Remember me</label>
+                      <div className="remember-me d-flex align-items-center justify-content-center check">
+                        <input type="checkbox" autoComplete="off" id="remember"/>
+                        <label htmlFor="remember" >Remember me</label>
                       </div>
                       <div
                         className="forgot-txt d-flex flex-end"

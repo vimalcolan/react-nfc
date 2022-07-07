@@ -11,23 +11,67 @@ import exportFromJSON from 'export-from-json'
 const Reports = () => {
   const title="Reports";
   const id=3;
-  const [reports,setReportsTable]=useState([])
+
+  const [reports,setReportsTable]=useState([]);
+  // const[customReport,setcustomReport]=useState([{
+  //   id:"",
+  //   name:"",
+  //   saved:"",
+  //   taps:""
+  // }])
   const navigate=useNavigate();
-  // Authentication
-  useEffect(() => {
-    if (sessionStorage.getItem("auth")) {
-      navigate("/reports");
-    } else {
-      navigate("/login");
-    }
-  }, []);
-//  Fetching Api Values
+
 useEffect(()=>{
+  // Authentication
+  if (sessionStorage.getItem("auth")) {
+    navigate("/reports");
+  } else {
+    navigate("/login");
+  }
+
+},[])
+
+useEffect(()=>{
+
+//  Fetching Api Values
   const fetchData= async ()=>{
+    // debugger;
     await axios.get("http://localhost:8001/reports").then(res=>setReportsTable(res.data))
   }
   fetchData();
+ 
 },[])
+
+// taps
+  // var tapsVal=[];
+  // for(var i of reports){
+  // tapsVal.push((i.reportDetails).length);
+  // }
+  
+
+
+// saves
+//   var getReportDetails=[];
+//   for (var i of reports){
+//     getReportDetails.push(i.reportDetails);
+//   }
+// var getSavedVal=[];
+//   for(var res of getReportDetails){
+//     // console.log("saved object",res);  
+//     getSavedVal.push(res)
+//   }
+//   console.log("");
+// for(var resp of getSavedVal){
+//   console.log("saved values",resp)
+// }
+
+
+
+
+
+
+
+
 // filter
 const[filterName,setFilterName]=useState("");
 const[filterLocation,setFilterLocation]=useState("");
@@ -93,6 +137,7 @@ const data=reports;
   const ExportToExcel = () => {  
     exportFromJSON({ data, fileName, exportType })  
   }  
+
   return (
     <>
     
